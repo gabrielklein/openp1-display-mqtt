@@ -8,10 +8,16 @@
 | Data pull-up | 10 kohm from GPIO27 to 3V3 |
 | Meter grounds | GND |
 | Meter power | Board 5V terminal |
-| Logical S1 | GPIO35, right button on supplied pinout |
+| Access button (S2; firmware name S1) | GPIO35, lower-left button beside USB-C with the port on the left |
 | Left/boot button | GPIO0 |
 | ST7789V MOSI / SCLK | GPIO19 / GPIO18 |
 | LCD CS / DC / reset / backlight | GPIO5 / GPIO16 / GPIO23 / GPIO4 |
+
+With the display facing you and the USB-C port on the left, the access button
+is **S2, the lower-left button next to the USB-C port**. See the
+[front photo](../hardware/Front.jpg). The upper-left button is labelled S1 on the
+board. The current firmware uses the logical name S1 for its GPIO35 access button;
+this naming clarification does not change the GPIO assignment or button behavior.
 
 GPIO35 has no internal pull-up. Verify the onboard resistor before relying on button reads. USB UART0 remains available for flashing/debug; use a separate UART controller for meter input. Do not use GPIO16 for RX.
 
