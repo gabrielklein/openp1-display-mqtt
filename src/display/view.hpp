@@ -5,7 +5,7 @@
 namespace openp1::display {
 enum class MqttState : std::uint8_t {Disabled,Waiting,Connected,Error};
 struct View {
-    std::array<std::array<char,21>,8> lines{}; // Footer/status retained for provisioning and S1.
+    std::array<std::array<char,21>,8> lines{}; // Footer/status retained for provisioning and S2.
     std::array<char,12> power{"--"};
     std::array<char,4> unit{"W"};
     std::array<char,12> flow{"Waiting"};

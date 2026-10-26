@@ -137,8 +137,8 @@ There is no application password; use the existing trusted-LAN access model.
 **S2 is the lower-left button next to the USB-C port**, with the display facing
 you and the USB-C port on the left (as in the [front photo](hardware/Front.jpg)).
 Press and release it to grant Full access for 300 seconds; an eight-second hold
-resets Wi-Fi only. This is the GPIO35 access button, currently called **S1** in
-firmware settings and on-screen instructions. It defaults off in menuconfig until
+resets Wi-Fi only. This is the GPIO35 access button, called **S2** in firmware settings and
+on-screen instructions. It defaults off in menuconfig until
 its pull-up is verified. Locked browser pages return to the dashboard once Full
 is available.
 Saving the access policy restarts the device and cancels any temporary grant.

@@ -7,7 +7,7 @@ constexpr char diagnostics_page[]=R"HTML(<!doctype html><html lang="en"><meta ch
 <section class="panel"><h2>Errors &amp; status</h2><div id="diagErrors"></div><small>Counters and the latest parser error since restart. An invalid frame does not replace good readings with zero. No error-history log is recorded.</small></section></main>
 <script>
 const diag=Object.fromEntries(['diagStatus','diagRawInfo','diagRaw','diagValues','diagErrors'].map(id=>[id,document.getElementById(id)]));
-async function diagRead(path){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);try{const r=await fetch(path,{cache:'no-store',signal:controller.signal});if(!r.ok){const error=Error(r.status===403?'Access unavailable. Press S1 for Full access.':'Device response unavailable (HTTP '+r.status+').');error.status=r.status;throw error}return await r.json()}catch(e){if(controller.signal.aborted)throw Error('Device response timed out. Retrying…');throw e}finally{clearTimeout(timer)}}
+async function diagRead(path){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);try{const r=await fetch(path,{cache:'no-store',signal:controller.signal});if(!r.ok){const error=Error(r.status===403?'Access unavailable. Press S2 for Full access.':'Device response unavailable (HTTP '+r.status+').');error.status=r.status;throw error}return await r.json()}catch(e){if(controller.signal.aborted)throw Error('Device response timed out. Retrying…');throw e}finally{clearTimeout(timer)}}
 function diagCell(parent,tag,text){const node=document.createElement(tag);node.textContent=text;parent.append(node);return node}
 function diagNumber(value){return Number.isFinite(value)?String(value):'—'}
 function showDiagnostics(d,r){

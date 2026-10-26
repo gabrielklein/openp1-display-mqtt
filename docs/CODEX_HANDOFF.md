@@ -15,7 +15,7 @@ readings, bounded memory and the eight-row DMA renderer. Fixtures use placeholde
 meter identifiers 12345678/1234567; live diagnostics may expose actual identifiers.
 Do not add credentials or personal configuration to examples, logs or Git.
 
-S1 defaults off until the GPIO35 pull-up is verified. Preserve server-side access,
+S2 defaults off until the GPIO35 pull-up is verified. Preserve server-side access,
 CSRF/origin checks, ongoing upload/stream checks and verified MQTT TLS. There is
 no application login. Do not reintroduce the removed debug console, diagnostic
 export/import/copy/download or advanced replay controls.

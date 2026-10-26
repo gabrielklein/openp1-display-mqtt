@@ -22,10 +22,10 @@ These requirements describe the current software. Historical notes under
 - Persist None/View/Full, default Full. No application password. None blocks
   readings/configuration but keeps MQTT/acquisition/LCD running. View is read-only.
 - Enforce access server-side on every request and ongoing stream/upload.
-- Optional active-low GPIO35 S1: short release grants Full for 300 seconds;
+- Optional active-low GPIO35 S2: short release grants Full for 300 seconds;
   eight-second hold resets Wi-Fi only. Reboot clears temporary access.
-- S1 is disabled by default until its external/onboard pull-up is verified.
-- Locked navigation uses an S1 waiting page. Its empty Full-access probe is the
+- S2 is disabled by default until its external/onboard pull-up is verified.
+- Locked navigation uses an S2 waiting page. Its empty Full-access probe is the
   explicit public exception; it exposes no readings, secrets or configuration.
 - Mutations require Full, station origin/Host validation and CSRF. Setup AP must
   not expose configuration, diagnostics or updates beyond Wi-Fi provisioning.

@@ -10,7 +10,7 @@ Preserve original raw bytes even when decoding fails. Bound every buffer and upl
 
 One shared pipeline for UART and replay. Reject malformed replay input clearly. Never silently convert application payloads into validated HDLC frames. Test malformed, fragmented, segmented and checksum-invalid inputs.
 
-Enforce access policies server-side on every endpoint and existing streaming connection. No application password. Wi-Fi-only provisioning cannot expose configuration or diagnostics. S1 grants temporary full access for 300 seconds, then restores the persisted policy. MQTT continues under access=None.
+Enforce access policies server-side on every endpoint and existing streaming connection. No application password. Wi-Fi-only provisioning cannot expose configuration or diagnostics. S2 grants temporary full access for 300 seconds, then restores the persisted policy. MQTT continues under access=None.
 
 No simultaneous meter and USB power. GPIO27 is proposed RX; GPIO16 is LCD DC. GPIO35 button needs an external pull-up (verify board resistor). Board and meter electrical compatibility remain unverified.
 

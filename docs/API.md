@@ -38,7 +38,7 @@ flags rather than fetched credentials/certificate contents.
 ## Browser and setup routes
 
 `/` is the dashboard, `/diagnostics` is read-only View/Full, and `/settings` is
-Full-only. Denied browser navigation shows the static `/unlock` S1 waiting page.
+Full-only. Denied browser navigation shows the static `/unlock` S2 waiting page.
 `/access-check` returns an empty 204 only when Full is available, otherwise 403;
 it reveals no configuration/readings/token and is always refused during setup.
 

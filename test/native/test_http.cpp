@@ -93,11 +93,11 @@ int main() {
     r=request("/setup/status");get(&r);assert(r.status=="404 Not Found");
     for(std::uint8_t p=0;p<3;++p){policy=p;grant.until=0;
         r=request("/access-check");get(&r);assert(r.status==(p==2?"204 No Content":"403 Forbidden")&&r.response.empty());
-        r=request("/unlock");get(&r);assert(r.status=="200 OK"&&r.response.find("Press S1 to unlock")!=std::string::npos);
+        r=request("/unlock");get(&r);assert(r.status=="200 OK"&&r.response.find("Press S2 to unlock")!=std::string::npos);
         r=request("/settings");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);assert(r.status==(p==2?"200 OK":"403 Forbidden"));
-        if(p!=2)assert(r.response.find("Press S1 to unlock")!=std::string::npos);
+        if(p!=2)assert(r.response.find("Press S2 to unlock")!=std::string::npos);
     }
-    policy=0;r=request("/");get(&r);assert(r.status=="403 Forbidden"&&r.response.find("Press S1 to unlock")!=std::string::npos);
+    policy=0;r=request("/");get(&r);assert(r.status=="403 Forbidden"&&r.response.find("Press S2 to unlock")!=std::string::npos);
     grant.activate(static_cast<std::uint64_t>(fake_time_us/1000));r=request("/access-check");get(&r);assert(r.status=="204 No Content");
     grant.until=0;r=request("/access-check");get(&r);assert(r.status=="403 Forbidden");
     policy=2;connected=true;r=request("/api/v1/status");get(&r);root=cJSON_Parse(r.response.c_str());assert(cJSON_GetObjectItemCaseSensitive(root,"wifi_rssi_dbm")->valueint==-62);assert(cJSON_GetObjectItemCaseSensitive(root,"gauge_limit_w")->valueint==5000);cJSON_Delete(root);
@@ -258,11 +258,11 @@ int main() {
     for(std::uint8_t p=0;p<3;++p){policy=p;r=request("/api/v1/raw");get(&r);assert(r.status==(p?"200 OK":"403 Forbidden"));
         if(p)assert(r.response.find("7E00FF")!=std::string::npos);}
 
-    for(std::uint8_t p=0;p<3;++p){policy=p;r=request("/diagnostics");get(&r);assert(r.status==(p?"200 OK":"403 Forbidden"));if(p)assert(r.response.find("Raw bytes")!=std::string::npos&&r.response.find("Decoded values")!=std::string::npos);else assert(r.response.find("Press S1 to unlock")!=std::string::npos);}
+    for(std::uint8_t p=0;p<3;++p){policy=p;r=request("/diagnostics");get(&r);assert(r.status==(p?"200 OK":"403 Forbidden"));if(p)assert(r.response.find("Raw bytes")!=std::string::npos&&r.response.find("Decoded values")!=std::string::npos);else assert(r.response.find("Press S2 to unlock")!=std::string::npos);}
     setup=true;policy=2;r=request("/diagnostics");get(&r);assert(r.response.find("Decoded values")==std::string::npos);setup=false;
     policy=1;reject_allocation_at_least=1;r=request("/api/v1/raw");get(&r);assert(r.status=="503 Service Unavailable");reject_allocation_at_least=0;
     policy=1;grant.until=0;r=request("/settings");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);
-    assert(r.status=="403 Forbidden" && r.response.find("Press S1 to unlock")!=std::string::npos);
+    assert(r.status=="403 Forbidden" && r.response.find("Press S2 to unlock")!=std::string::npos);
     policy=2;r=request("/settings");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);assert(r.status=="200 OK");
     r=request("/settings");r.headers["Host"]=ip;r.headers["Origin"]=std::string("http://")+ip;
     throw_next_new=true;assert(get(&r)==ESP_OK&&!throw_next_new&&r.status=="503 Service Unavailable");

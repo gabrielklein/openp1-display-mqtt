@@ -1,6 +1,6 @@
 menu "OpenP1 input and display"
-config OPENP1_S1
-    bool "Enable S1 GPIO35 (verify external/onboard pull-up first)"
+config OPENP1_S2
+    bool "Enable S2 GPIO35 (verify external/onboard pull-up first)"
     default n
     help
         GPIO35 has no internal pull-up. Enable only after verifying its resistor.

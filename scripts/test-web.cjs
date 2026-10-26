@@ -34,7 +34,7 @@ function wizard(state='success') {
   const a=context(async()=>{if(!online)throw Error('offline');return ok({simulation:true,connected:true,errors:0,values:[{name:'<script>',obis:'1.0.1.7.0.255',value:950,unit:'W',age_ms:16000,stale:true}]})});
   vm.runInContext(scripts[0],a.sandbox);await settle();
   assert.match(a.elements.state.textContent,/Simulation/);
-  assert.match(a.elements.accessState.textContent,/Press and release S1/);
+  assert.match(a.elements.accessState.textContent,/Press and release S2/);
   assert.equal(a.elements.settings.hidden,true);
   assert.equal(a.elements.values.children[0].className,'stale');
   assert.equal(a.elements.values.children[0].children[0].textContent,'<script>');

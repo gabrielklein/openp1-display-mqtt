@@ -8,16 +8,15 @@
 | Data pull-up | 10 kohm from GPIO27 to 3V3 |
 | Meter grounds | GND |
 | Meter power | Board 5V terminal |
-| Access button (S2; firmware name S1) | GPIO35, lower-left button beside USB-C with the port on the left |
+| Access button (S2) | GPIO35, lower-left button beside USB-C with the port on the left |
 | Left/boot button | GPIO0 |
 | ST7789V MOSI / SCLK | GPIO19 / GPIO18 |
 | LCD CS / DC / reset / backlight | GPIO5 / GPIO16 / GPIO23 / GPIO4 |
 
 With the display facing you and the USB-C port on the left, the access button
 is **S2, the lower-left button next to the USB-C port**. See the
-[front photo](Front.jpg). The upper-left button is labelled S1 on the
-board. The current firmware uses the logical name S1 for its GPIO35 access button;
-this naming clarification does not change the GPIO assignment or button behavior.
+[front photo](Front.jpg). Use this lower button for access; the upper-left button is a separate control.
+The S2 access button uses GPIO35.
 
 GPIO35 has no internal pull-up. Verify the onboard resistor before relying on button reads. USB UART0 remains available for flashing/debug; use a separate UART controller for meter input. Do not use GPIO16 for RX.
 
@@ -70,7 +69,7 @@ https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/periph
 
 ## Current validation and panel profile
 
-The user accepted display/replay, S1/access, MQTT and web-update functionality.
+The user accepted display/replay, S2/access, MQTT and web-update functionality.
 No electrical measurements, exact flashed image hash or long-run duration were
 supplied. Flash capacity, RX idle voltage/interface, meter power budget under
 radio load and GPIO35 pull-up remain M7 checks. See [test plan](../docs/TEST_PLAN.md).
@@ -79,6 +78,6 @@ The software uses the ESP-IDF ST7789 driver: SPI2, 20 MHz, 240×135 landscape,
 XY swap and X mirror, gap 40/53, inversion enabled. Color rendering uses an
 eight-row DMA band. Rotation is persistent and configurable by 180°.
 
-S1 is active-low GPIO35 with internal pulls disabled, 50 ms debounce, short release
+S2 is active-low GPIO35 with internal pulls disabled, 50 ms debounce, short release
 for 300-second Full access and an eight-second Wi-Fi-only reset hold with visible
 countdown. It is off by default in menuconfig until its pull-up is verified.

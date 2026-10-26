@@ -9,7 +9,7 @@ There is no remote or public release.
 | --- | --- |
 | M0–M2: platform, shared UART/replay parser and LCD | Complete; display/replay accepted |
 | M3: Wi-Fi provisioning and dashboard | Accepted |
-| M4: policies/S1, MQTT, TLS and Home Assistant Discovery | Accepted |
+| M4: policies/S2, MQTT, TLS and Home Assistant Discovery | Accepted |
 | M5: persistent UART settings and read-only diagnostics | Accepted, reduced scope |
 | M6: Full-only web update, date versions and packaging script | Accepted |
 | M7: hardware/electrical, prolonged real-meter test and release | Open |

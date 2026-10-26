@@ -2,7 +2,7 @@
 
 Offline HTML/CSS/JS is compiled into the firmware without npm/CDN dependencies.
 pages.hpp provides setup and dashboard; settings.hpp provides Full-only settings
-and OTA; diagnostics.hpp is read-only View/Full; access.hpp waits for S1 Full access.
+and OTA; diagnostics.hpp is read-only View/Full; access.hpp waits for S2 Full access.
 
 Settings serializes timed API calls, shows action feedback and never retries
 mutations automatically. OTA pauses polling and shows the restart page after

@@ -50,7 +50,7 @@ Retain useful logs privately; anonymize identifiers and network details before s
 ## 5. Access and persistence
 
 Verify None/View/Full against the actual API/UI, including firmware update denial
-without Full. MQTT must continue in None. If S1 is enabled, test short grant,
+without Full. MQTT must continue in None. If S2 is enabled, test short grant,
 300-second expiry and return to persisted policy. Check ongoing SSE/upload access
 loss. Confirm UART, MQTT, display, source and access settings survive restart.
 

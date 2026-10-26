@@ -59,7 +59,7 @@
 
 ## Sentence-case LCD labels (2026-10-26)
 
-- Display Import, Export, Balanced, Waiting, Simulation, Stale and WiFi/S1
+- Display Import, Export, Balanced, Waiting, Simulation, Stale and WiFi/S2
   messages in sentence case. Keep acronyms/units such as MQ, RX, UART, L1 and W.
 - Add original lowercase 5x7 glyphs instead of forcing every letter to uppercase;
   this also renders kW correctly. Preserve colors, rotation and DMA bounds.
@@ -73,7 +73,7 @@
 - Add View/Full Diagnostics linked from readings/Settings: bounded raw tail,
   decoded scalar/string values with OBIS/type/scaler/unit/age and parser counters/
   latest error. Use sequential existing API requests and no new firmware buffer.
-- Clear stale snapshots on unavailable reads; clear and open S1 waiting on access
+- Clear stale snapshots on unavailable reads; clear and open S2 waiting on access
   loss. Insert meter data as text, never HTML. Harden raw cJSON allocation cleanup
   so incomplete serialization returns 503. Describe history/snapshot limits.
 - Checks: UI sequential polling, raw fidelity, hostile strings, errors/denial,
@@ -84,7 +84,7 @@
 
 - Replace reading pagination with a stable net-import/export power card: large
   W/kW number, red import/green export, neutral balanced/waiting and amber stale.
-  Put small L1/L2/L3 voltages underneath; keep network/IP/S1 in the footer.
+  Put small L1/L2/L3 voltages underneath; keep network/IP/S2 in the footer.
 - Add Wi-Fi arcs with sampled signal strength, colored MQ connection state and
   a 400 ms RX pulse per new decoded notification (including simulation).
   Broker/radio calls stay out of acquisition; footer cache avoids false drops
@@ -94,7 +94,7 @@
   reception pulse/icon checks, protocol and HTTP/MQTT ASan/UBSan, embedded web
   tests and pinned ESP-IDF build pass (tracked fixtures in an isolated copy).
   Host RGB previews inspected; physical color/legibility/refresh acceptance and
-  S1/icon operation remain to be confirmed. No hardware flash.
+  S2/icon operation remain to be confirmed. No hardware flash.
 
 ## Remove real-data normal topic suffix (2026-10-26)
 
@@ -159,14 +159,14 @@
 
 ## Physical unlock waiting page (2026-10-25)
 
-- Replace denied browser navigation to main/settings with an English S1 waiting
+- Replace denied browser navigation to main/settings with an English S2 waiting
   page. Poll an empty status-only 204/403 probe, then automatically open `/`
   when Full access is confirmed; reconnect gracefully while waiting.
 - Keep protected APIs guarded and deny the probe in setup mode. The public
   static shell/probe reveal no config, measurements, diagnostics or tokens.
 - Host checks cover None/View/Full, grant/expiry, setup refusal and automatic
   navigation/reconnect; embedded web, HTTP/MQTT tests and pinned ESP-IDF build
-  pass. Physical S1 acceptance remains pending; no flash.
+  pass. Physical S2 acceptance remains pending; no flash.
 
 ## Restart after access-policy save (2026-10-25)
 
@@ -416,14 +416,14 @@
 - Add temporary debug capture, clear history and pause updates to Settings.
   Show uptime timestamps, connection/login attempts and broker acceptance,
   numeric connection errors, outgoing topics/payload previews, QoS, retain,
-  client results and QoS acknowledgement message IDs. Also trace Wi-Fi, S1
+  client results and QoS acknowledgement message IDs. Also trace Wi-Fi, S2
   presses/releases/actions and saved access/display/MQTT settings.
 - Bound RAM history to 24 entries, with explicit truncation and loss counters.
   Omit credentials and certificates; protect all console requests with Full
   access, origin checks and CSRF on mutations. Render payloads as text.
 - Checks: native ring bounds/overwrite/contention tests, HTTP access/input tests,
   MQTT service tests checking real outgoing traces and credential omission,
-  embedded console tests and pinned PlatformIO ESP-IDF build. Physical S1 and
+  embedded console tests and pinned PlatformIO ESP-IDF build. Physical S2 and
   live broker/TLS acceptance remain pending; no flashing or milestone tag.
 
 ## Persistent screen rotation (2026-10-25)
@@ -473,7 +473,7 @@
 
 ## M4 settings-access feedback and short-press polling (2026-10-24)
 
-- Reduce the network/S1 worker delay from 100 ms to 10 ms: the old cadence
+- Reduce the network/S2 worker delay from 100 ms to 10 ms: the old cadence
   combined with 50 ms debounce could miss an ordinary brief press/release.
 - Show effective access and remaining grant time directly in the dashboard.
   Distinguish Full-required from canonical station-origin rejection when
@@ -484,9 +484,9 @@
 
 ## Unreleased — M4 software (2026-10-24; live acceptance pending)
 
-- Implement persisted None/View/Full guards, monotonic 300-second S1 grant,
+- Implement persisted None/View/Full guards, monotonic 300-second S2 grant,
   expiry during mutation receipt and per-chunk revocation on bounded SSE streams.
-- Add debounced GPIO35 S1 with eight-second visible Wi-Fi-only reset countdown,
+- Add debounced GPIO35 S2 with eight-second visible Wi-Fi-only reset countdown,
   boot-held suppression and no short action after long release. Disabled by
   default until the external/onboard pull-up is verified.
 - Add Full-only policy/MQTT settings with CSRF/Host/Origin checks, bounded shallow
@@ -499,8 +499,8 @@
   MQTT service with host clock/transport/NVS doubles, JSON secret/mutation tests,
   embedded dashboard/wizard/settings scripts. HTTP/SSE/MQTT host tests also pass
   AddressSanitizer/UndefinedBehaviorSanitizer (leak detection disabled). PlatformIO builds cover replay
-  and UART with S1 enabled; original local replay settings restored afterward.
-- No physical S1, live broker/TLS rejection or HA acceptance is claimed. Follow
+  and UART with S2 enabled; original local replay settings restored afterward.
+- No physical S2, live broker/TLS rejection or HA acceptance is claimed. Follow
   docs/M4.md before M4 tag/M5. No agent flashing, remote publishing or new library.
 
 ## M3 acceptance (2026-10-24)
@@ -592,7 +592,7 @@
   downloaded dependencies. User replay settings restored after UART build.
 - Android/iOS captive detection, real provisioning, NVS persistence, router
   interruption/recovery and physical endpoint-policy checks remain pending in
-  docs/M3.md. No agent flashing or M3 tag. MQTT, S1, full configuration, raw
+  docs/M3.md. No agent flashing or M3 tag. MQTT, S2, full configuration, raw
   diagnostics/export, uploads and streaming remain later milestones.
 
 ## Physical display observation (2026-10-23)

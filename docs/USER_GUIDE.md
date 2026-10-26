@@ -25,8 +25,7 @@ module from USB and the meter at the same time.**
 
 The access button is **S2, the lower-left button next to the USB-C port**, with
 the display facing you and the USB-C port on the left. See the
-[front photo](../hardware/Front.jpg). Firmware settings/messages currently call
-this GPIO35 button **S1**. The other button is not the access button. S1/GPIO35
+[front photo](../hardware/Front.jpg). Firmware settings/messages call this GPIO35 button **S2**. The other button is not the access button. S2/GPIO35
 support defaults off in menuconfig until its external/onboard pull-up is verified.
 
 ## 2. Build and install
@@ -103,7 +102,7 @@ A fresh configuration defaults to Full; saved policies persist across restart.
 | View | Dashboard, readings and read-only diagnostics |
 | Full | All of the above, Settings and firmware upload |
 
-When button support is enabled, press and release S2 (called S1 in firmware) to
+When button support is enabled, press and release S2 to
 grant Full for 300 seconds. Locked browser pages wait for the grant and return to
 the dashboard. An eight-second hold resets Wi-Fi only, with a visible countdown.
 

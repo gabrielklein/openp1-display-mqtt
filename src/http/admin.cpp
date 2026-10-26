@@ -34,7 +34,7 @@ esp_err_t admin_get(httpd_req_t* r){
             cJSON_AddNumberToObject(root,"remaining_seconds",grant.remaining(now_ms()));}
         return json(r,root);
     }
-    if(!permits(2))return reply(r,"403 Forbidden","{\"error\":{\"code\":\"full_required\",\"message\":\"Full access required: press and release S1, then retry.\"}}");
+    if(!permits(2))return reply(r,"403 Forbidden","{\"error\":{\"code\":\"full_required\",\"message\":\"Full access required: press and release S2, then retry.\"}}");
     if(!same_origin(r,false))return reply(r,"403 Forbidden","{\"error\":{\"code\":\"station_origin_required\",\"message\":\"Use the device IP shown on its display in a regular browser.\"}}");
     if(!std::strcmp(r->uri,"/api/v1/firmware"))return firmware_get(r);
     if(!std::strcmp(r->uri,"/settings"))return reply(r,"200 OK",settings_page,"text/html; charset=utf-8");

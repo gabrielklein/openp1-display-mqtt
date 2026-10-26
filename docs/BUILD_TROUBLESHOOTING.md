@@ -81,7 +81,7 @@ The application now requires CONFIG_COMPILER_CXX_EXCEPTIONS=y and
 CONFIG_COMPILER_CXX_EXCEPTIONS_EMG_POOL_SIZE=2048 or larger. Defaults also cap
 Wi-Fi dynamic RX/TX buffers at 10/8. sdkconfig.defaults does not override an
 existing saved profile: update older profiles with `pio run -e tenstar_tdisplay
--t menuconfig`, preserving other board/serial/S1 settings. main.cpp rejects the
+-t menuconfig`, preserving other board/serial/S2 settings. main.cpp rejects the
 old no-exceptions/zero-pool profile.
 
 Startup logs show free/largest 8-bit heap; guarded status/values APIs expose

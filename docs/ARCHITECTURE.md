@@ -24,7 +24,7 @@ remain distinct. All timeouts use monotonic time.
 | `src/config/serial.*` | Versioned NVS UART settings; immutable boot profile |
 | `src/simulation/` | NVS simulation selection/sequence and delayed restart |
 | `src/access/` | Portable policies, timed grants and button state machine |
-| `src/connectivity/` | AP/STA, captive DNS, reconnect worker, shared guarded state and S1 |
+| `src/connectivity/` | AP/STA, captive DNS, reconnect worker, shared guarded state and S2 |
 | `src/http/` | Offline pages, read APIs, guarded settings, SSE and OTA upload |
 | `src/mqtt/` | Broker/TLS/NTP lifecycle, bounded publication, discovery and status |
 | `src/display/` | Portable view/raster, ST7789 worker, display settings |
@@ -55,7 +55,7 @@ The reserved storage partition remains unmounted; there is no capture filesystem
 
 Versioned NVS records preserve configuration across restart. UART and simulation
 settings are applied at boot; display changes apply at refresh. Access-policy
-saves persist then schedule restart. The network worker owns S1 and delayed reboot.
+saves persist then schedule restart. The network worker owns S2 and delayed reboot.
 
 Full/origin/CSRF checks protect settings; ongoing upload/stream checks enforce
 policy expiry. Setup is a separate Wi-Fi-only surface. TLS verifies trust chain

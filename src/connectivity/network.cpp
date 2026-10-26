@@ -61,7 +61,7 @@ void event(void*, esp_event_base_t base, std::int32_t id, void* data) {
     }
 }
 void worker(void*) {
-#ifdef CONFIG_OPENP1_S1
+#ifdef CONFIG_OPENP1_S2
     access::Button button;
 
     gpio_config_t button_config{};button_config.pin_bit_mask=1ULL<<35;
@@ -85,7 +85,7 @@ void worker(void*) {
         const auto now=now_ms();
         if(now>=next_signal){next_signal=now+2000;wifi_ap_record_t info{};const auto status=esp_wifi_sta_get_ap_info(&info);Guard guard;wifi_signal=connected&&status==ESP_OK?info.rssi:-127;}
         if(simulation::restart_due(now))esp_restart();
-#ifdef CONFIG_OPENP1_S1
+#ifdef CONFIG_OPENP1_S2
         if(button_ready){
             const auto action=button.update(gpio_get_level(GPIO_NUM_35)==0,now);
             {Guard guard;reset_countdown=button.countdown(now);
