@@ -1,7 +1,6 @@
 # MQTT
 
-M4 implements bounded broker lifecycle/publication, certificate-verified TLS,
-NVS configuration, retained LWT/availability and optional HA discovery/raw.
-`config.hpp`, `json.hpp`, `payload.hpp`, `transport.hpp` contain testable builders;
-`service.cpp` owns the client. No access-policy dependency. Replay is blocked.
-See docs/M4.md for limits and live broker/TLS checks still pending.
+service.cpp owns broker/TLS/NTP lifecycle, bounded publication, status and
+Discovery. Config/JSON/payload/transport/text helpers are host-testable. Real
+publications use the root directly; replay appends /simulation. MQTT is independent
+of web access policy. See ../../docs/MQTT.md and ../../docs/ARCHITECTURE.md.

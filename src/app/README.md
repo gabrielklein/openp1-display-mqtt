@@ -1,3 +1,4 @@
-# app
+# Application lifecycle
 
-Planned module, not implemented. See docs/ARCHITECTURE.md and docs/ROADMAP.md.
+This directory is a placeholder. Current startup and acquisition coordination
+live in src/main.cpp. See ../../docs/ARCHITECTURE.md.

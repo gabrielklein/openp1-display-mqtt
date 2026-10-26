@@ -39,30 +39,17 @@ https://github.com/Xinyuan-LilyGO/TTGO-T-Display
 RX inversion reference:
 https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/uart.html
 
-## Bench checklist
+## Current validation and panel profile
 
-2026-10-23 user observation: the physical display shows `OPENP1 UART`,
-`NO READINGS ERR 0` and `NONE`, in black and white. This matches the current
-monochrome renderer and UART startup view. It confirms visible text on the
-screen. The user also confirms correct text orientation and no edge clipping.
-Replay pagination, SIMULATION and stale
-rendering were subsequently reported successful by the user in the requested
-replay test. M2 display acceptance is complete on that basis; the exact flashed
-revision was not supplied. Electrical compatibility remains unverified.
+The user accepted display/replay, S1/access, MQTT and web-update functionality.
+No electrical measurements, exact flashed image hash or long-run duration were
+supplied. Flash capacity, RX idle voltage/interface, meter power budget under
+radio load and GPIO35 pull-up remain M7 checks. See TEST_PLAN.md.
 
-Confirm actual flash capacity, display colours/offset/orientation, GPIO35 polarity, RX idle voltage, serial baud/parity and meter supply under radio load. Record measured results in this file. Current status: basic screen and replay checked by user; electrical checks remain pending.
+The software uses the ESP-IDF ST7789 driver: SPI2, 20 MHz, 240×135 landscape,
+XY swap and X mirror, gap 40/53, inversion enabled. Color rendering uses an
+eight-row DMA band. Rotation is persistent and configurable by 180°.
 
-## M2 proposed software panel profile
-
-ESP-IDF ST7789 driver: SPI2, 20 MHz, 240x135 landscape, XY swap and X
-mirror, gap 40/53, inversion enabled; GPIOs remain as listed above. This
-is an implementation based on the LILYGO reference, not a measured Tenstar
-validation. Host raster rendering was inspected; physical display acceptance
-was reported successful by the user on 2026-10-23. See [M2](M2.md) for the bench checklist. No flashing was done.
-
-## M4 S1 software profile
-
-S1 uses active-low GPIO35, internal pull resistors disabled, 50 ms debounce,
-a short release for 300-second Full access and an eight-second Wi-Fi-only reset
-hold with visible countdown. It is off by default in menuconfig until the
-external/onboard pull-up is verified. No S1 bench test is claimed.
+S1 is active-low GPIO35 with internal pulls disabled, 50 ms debounce, short release
+for 300-second Full access and an eight-second Wi-Fi-only reset hold with visible
+countdown. It is off by default in menuconfig until its pull-up is verified.

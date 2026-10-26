@@ -1,6 +1,6 @@
 # HTTP
 
-`server.cpp` serves setup/read/raw APIs; `admin.cpp` enforces Full/CSRF for
-policy and MQTT settings; `stream.cpp` owns bounded, access-checked SSE.
-Full configuration, upload/replay controls and capture export remain M5.
-See docs/API.md and docs/M4.md.
+server.cpp serves setup/read/raw/page routes; admin.cpp guards settings with
+Full/origin/CSRF; stream.cpp owns bounded access-checked SSE; firmware.cpp streams
+validated application uploads into an inactive OTA slot. See ../../docs/API.md
+and ../../docs/FIRMWARE_UPDATE.md.

@@ -4,7 +4,7 @@ Read docs/REQUIREMENTS.md, docs/HARDWARE.md, docs/ARCHITECTURE.md and docs/ROADM
 
 Use PlatformIO + ESP-IDF with C++17-compatible application code. Keep meter parsing portable and independent from ESP-IDF. Pin platform and added dependencies. Do not substitute Arduino without an explicit architectural decision.
 
-This repository is a scaffold. Never describe planned features as implemented. Complete milestones in order; commit each working milestone and tag only after its stated checks pass. No public publishing or remote repository is configured. Never flash hardware unless the user requests it.
+This repository contains the implemented firmware through accepted M6; M7 validation remains open. Use current docs, not docs/pre-release, as the source of truth. Never describe planned features as implemented. Complete milestones in order; commit each working milestone and tag only after its stated checks pass. No public publishing or remote repository is configured. Never flash hardware unless the user requests it.
 
 Preserve original raw bytes even when decoding fails. Bound every buffer and upload. Parse HDLC by declared length and protocol rules; do not split blindly on every 0x7E. Validate frame checksums, reassemble segments, then decode DLMS A-XDR and OBIS with scalers and units. Preserve unknown objects. A failed frame must not replace valid readings with zeros.
 

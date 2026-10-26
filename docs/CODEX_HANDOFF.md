@@ -1,25 +1,26 @@
-# M6 web update; M7 hardware/release
+# Development handoff
 
-Read AGENTS.md, docs/REQUIREMENTS.md, HARDWARE.md, ARCHITECTURE.md, ROADMAP.md
-and M5.md first. M4 and revised M5 were accepted by the user on 2026-10-26,
-with local tags v0.4.0 and v0.5.0. No independent electrical measurements,
-exact flashed revision or soak durations were supplied. No agent flashing or
-public publishing is claimed. M6 now covers Full-only web firmware update, the .bin build script and date
-versions; accepted by user report on 2026-10-26 with local v0.6.0 (M6.md).
-Exact flashed hash and detailed fault-test procedures were not supplied. Former M6 hardware/electrical, prolonged real-meter validation,
-clean install and licence/release audit move to M7.
+Read AGENTS.md, REQUIREMENTS.md, HARDWARE.md, ARCHITECTURE.md and ROADMAP.md.
+The current code includes accepted M0–M6 functionality. Continue with the M7
+hardware/release checks in TEST_PLAN.md; do not describe the final release or
+unmeasured electrical compatibility as validated.
 
-The user removed export/import, pause/speed/loop-toggle and capture copy/download
-from M5. Do not reintroduce them. Persisted UART settings and read-only raw/
-decoded/error diagnostics are implemented and accepted. Do not claim v1.0.0
-ready before M7 checks and user acceptance.
+Git was reset to an anonymized initial snapshot. Old milestone commits/tags and
+the history bundle are gone. Use `git --git-dir=.git-local --work-tree=.` in this
+workspace; no remote is configured. `docs/pre-release/` is historical material,
+not current instructions or available Git history. Do not restore personal captures.
 
-S1 defaults off until its GPIO35 pull-up is verified. Never flash or publish
-without user instruction. Never power from USB and meter simultaneously.
-Preserve UART/replay shared parsing, exact raw bytes, source MQTT isolation and
-last-good readings. Keep acquisition off network waits, retain the low-RAM
-band renderer and bound every upload/copy. Test malformed input and access expiry.
+Preserve portable shared UART/replay parsing, exact live raw bytes, last-good
+readings, bounded memory and the eight-row DMA renderer. Fixtures use placeholder
+meter identifiers 12345678/1234567; live diagnostics may expose actual identifiers.
+Do not add credentials or personal configuration to examples, logs or Git.
 
-Use git --git-dir=.git-local --work-tree=. in this workspace; no remote is
-configured. Original personal captures were removed. Tests use anonymized test/fixtures inputs;
-do not restore original captures from historical commits.
+S1 defaults off until the GPIO35 pull-up is verified. Preserve server-side access,
+CSRF/origin checks, ongoing upload/stream checks and verified MQTT TLS. There is
+no application login. Do not reintroduce the removed debug console, diagnostic
+export/import/copy/download or advanced replay controls.
+
+Never flash or publish without user instruction. Never power from meter and USB
+simultaneously. Record meaningful checks/limitations and commit completed work.
+Current build/test commands are in README.md; do not tag a milestone until its
+checks and user acceptance pass.

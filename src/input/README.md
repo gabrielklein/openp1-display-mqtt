@@ -16,4 +16,4 @@ cycle. Timeouts and display/network snapshots continue during the pause.
 UART is not installed in simulation. MQTT uses the simulation branch and
 distinct Home Assistant identities when enabled. See simulation/service.cpp
 for NVS and delayed-restart ownership. File import/export, pause and speed
-controls remain unimplemented.
+controls are outside the agreed scope.

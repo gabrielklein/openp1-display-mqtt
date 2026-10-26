@@ -4,4 +4,4 @@ Two-piece nonconductive enclosure: front display window with recessed bezel, acc
 
 Use a 3D-printed prototype; measure actual board outline, display position, button height, connector clearances and cable diameter before producing CAD/STL. No final mechanical dimensions are asserted. Label: OpenP1 Display / P1 5V OR USB / Disconnect P1 before USB.
 
-Simple electrical parts: T-Display board, compatible P1 cable/connector, one 10 kohm RX pull-up, insulated connections. Confirm activation wiring and open-collector signal before assembly. Final BOM and mechanical CAD are M6 deliverables.
+Simple electrical parts: T-Display board, compatible P1 cable/connector, one 10 kohm RX pull-up, insulated connections. Confirm activation wiring and open-collector signal before assembly. Final BOM and mechanical CAD are M7 deliverables.

@@ -1,5 +1,6 @@
-# Display (M2 software, physical check pending)
+# Display
 
-Portable fixed-size view and raster rendering: view.hpp/cpp. ESP-IDF ST7789
-SPI adapter and latest-view mailbox: st7789.cpp. No external font/library.
-Configuration, bounds and pending physical acceptance: [M2](../../docs/M2.md).
+view.hpp/cpp provides portable view/raster rendering. st7789.cpp owns SPI and the
+latest-view mailbox, rendering color bands with a 3840-byte DMA buffer. The LCD
+shows net power, phase voltages, Wi-Fi/MQTT/RX and access/IP status, with optional
+180° rotation. See ../../docs/HARDWARE.md and ../../docs/ARCHITECTURE.md.

@@ -1,3 +1,5 @@
-# config
+# Configuration
 
-Planned module, not implemented. See docs/ARCHITECTURE.md and docs/ROADMAP.md.
+serial.hpp/cpp owns versioned, validated NVS UART settings and immutable boot
+settings. MQTT, simulation, access and display configuration live with their
+services. See ../../docs/ARCHITECTURE.md and ../../docs/API.md.

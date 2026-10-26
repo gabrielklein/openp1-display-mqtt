@@ -41,19 +41,9 @@ alternative `PLATFORMIO_UPLOAD_PORT` environment variable is also supported,
 but VS Code must inherit that variable to use it for its tasks. See the
 [official upload_port documentation](https://docs.platformio.org/en/latest/projectconf/sections/env/options/upload/upload_port.html).
 
-A targeted host check against the installed PlatformIO finder verified that
-an explicit non-wildcard port returns without loading other platforms and
-without opening a serial device. No serial device is exposed in the assistant's
-environment; no upload was attempted or confirmed. If a later step reports
-another error, retain its full log: this workaround addresses this discovery
-failure only. M2 physical display acceptance remains pending.
-
-For broader environment compatibility, an isolated PlatformIO installation using
-Python 3.12 is an alternative, but no global Python or installed platform was
-modified for this workaround. Python 3.12.12 is already installed locally at
-`~/.pyenv/versions/3.12.12/bin/python`; the `python3.12` shim is not currently
-selected. Do not remove global environments or upgrade the pinned project
-platform merely to bypass the discovery issue.
+This workaround bypasses discovery only. For environment compatibility, use an
+isolated PlatformIO installation with a Python version supported by its packages.
+Keep the pinned project platform; do not switch frameworks to fix port detection.
 
 ## Browser reports “Header fields are too long” (HTTP 431)
 

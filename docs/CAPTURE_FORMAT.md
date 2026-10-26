@@ -1,13 +1,23 @@
-# Diagnostic capture v1 (planned contract)
+# Simulation input format
 
-M1 supports strict hex and MQTT lines only, with an explicitly supplied layer.
-JSONL and permissive skipped-line reporting below remain M5 work; M1 rejects
-unsupported lines clearly. See [M1](M1.md).
+Full Settings accepts strict hex lines or MQTT-style lines ending in one hex
+payload, for example:
 
-UTF-8 .txt, one JSON object per line (JSONL). First record type=meta, schema=openp1.capture, version=1. Input records type=rx carry monotonic t_ms, layer=wire_hdlc or llc_apdu, and hex. Subsequent type=decoded or error records refer to rx sequence numbers. Chunks may be incomplete frames. Decoder must combine chunks; timestamps preserve input timing.
+```text
+example/p1/hdlc E6E700...
+```
 
-The replay reader consumes rx records only. Saved decoded/error records are expected results for debugging, never a substitute for decoding the original bytes. Metadata includes firmware and UART settings, never credentials. Limits and truncation are explicit records, never silent data loss.
+The ellipsis is illustrative and must be replaced with complete hex. Select the
+input layer explicitly: **wire HDLC** includes frame headers/flags/checksums;
+**LLC/APDU** is already reassembled application data, even if an old topic calls
+it `hdlc`. Never wrap an application payload into a fabricated validated frame.
 
-Also accept standalone hex lines and MQTT lines ending in a hex payload. Parse the log wrapper before strict hex validation. MQTT /raw and /hdlc from the user's previous project identify different layers; do not assume /hdlc includes the outer HDLC envelope. Ignore irrelevant log lines with visible skipped-line counts. Reject malformed candidate records with line-numbered errors.
+Input is bounded to 4096 text characters and 2048 decoded bytes. Malformed hex,
+odd digits, unsupported wrappers and empty input are rejected. JSONL, arbitrary
+log filtering and file import/export are not supported. Replay feeds 64-byte
+chunks at 20 ms intervals and repeats after a 3.5-second pause.
 
-Examples in captures are deliberately synthetic and are NOT valid meter telegrams. Add complete user captures as regression fixtures only when available; never present truncated conversation snippets as valid checksummed frames.
+Anonymized fixtures live in `test/fixtures/`; their README describes same-length
+identifier replacement and recalculated FCS checksums. They are not verbatim
+original captures. Runtime diagnostics preserve actual received bytes and can
+therefore contain real meter identifiers; anonymize before sharing them.

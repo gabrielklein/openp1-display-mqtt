@@ -1,9 +1,5 @@
 # Connectivity
 
-M3 implements AP/STA Wi-Fi, NVS persistence after successful provisioning,
-bounded captive DNS and reconnect backoff. `network.cpp` owns lifecycle;
-`model.hpp` contains portable guards, bounds and DNS logic. See docs/M3.md.
-
-M4 adds guarded policy/grant state, optional GPIO35 S1 handling and a bounded
-raw tail. MQTT/SSE consumers take independent snapshots; acquisition never
-waits for network operations. See docs/M4.md.
+network.cpp owns AP/STA lifecycle, Wi-Fi persistence, captive DNS, reconnect
+backoff and S1. Shared guarded state exposes bounded snapshots without making
+acquisition wait for network I/O. See ../../docs/ARCHITECTURE.md.
