@@ -42,6 +42,9 @@ owner’s requirements, feedback and on-device testing.
 Start with the **[user guide](docs/USER_GUIDE.md)** for installation, Wi-Fi setup,
 access buttons, Settings, MQTT, simulation, updates and troubleshooting.
 
+Find installation-specific UART settings in the **[country and meter profiles](docs/countries/README.md)**,
+starting with [Switzerland / Romande Energie — ISKRAEMECO AM550](docs/countries/switzerland/romande-energie.md).
+
 ## Why I built this
 
 I started with an existing ESP8266 P1-to-MQTT project, but I could not get it
@@ -71,13 +74,13 @@ and a working solution for my particular setup.
 
 ## Bill of materials (BOM)
 
-| Item | Quantity | Specification / purchase link |
-| --- | --- | --- |
-| ESP32 T-Display board | 1 | [Tenstar TS0636G T-Display](https://s.click.aliexpress.com/e/_EzsGsy2), 16 MiB flash profile |
-| P1 connector/cable | 1 | [RJ12 6P6C](https://s.click.aliexpress.com/e/_EJhce4K), six positions and six contacts |
-| RX pull-up resistor | 1 | **10 kΩ**, between GPIO27 (RX) and 3.3 V, for the proposed compatible open-collector interface |
-| Insulated wire and heat-shrink | As needed | Secure, insulated connections |
-| Nonconductive enclosure | 1 | Sized for the board, display, button and cable strain relief |
+| Item                           | Quantity  | Specification / purchase link                                                                     |
+| ------------------------------ | --------- | ------------------------------------------------------------------------------------------------- |
+| ESP32 T-Display board          | 1         | [Tenstar TS0636G T-Display](https://s.click.aliexpress.com/e/_EzsGsy2), 16 MiB flash profile      |
+| P1 connector/cable             | 1         | [RJ12 6P6C](https://s.click.aliexpress.com/e/_EJhce4K), six positions and six contacts            |
+| RX pull-up resistor            | 1         | **10 kΩ**, between GPIO27 (RX) and 3.3 V, for the proposed compatible open-collector interface    |
+| Insulated wire and heat-shrink | As needed | Secure, insulated connections                                                                     |
+| Nonconductive enclosure        | 1         | Sized for the board, display, button and cable strain relief. Mine was provided with the tenstar. |
 
 Purchase links were supplied by the project owner. Verify the actual board,
 connector pin mapping and meter electrical interface before assembly. A pull-up

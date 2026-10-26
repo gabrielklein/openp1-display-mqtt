@@ -130,6 +130,8 @@ The default UART profile is **115200, 8 data bits, no parity, 1 stop bit, invert
 RX**. Use settings matching the actual meter. Saving UART does not disable
 simulation; source selection is separate. Saved runtime settings override initial
 menuconfig defaults on later boots.
+See [country and meter profiles](countries/README.md) for documented installation
+settings, including Switzerland / Romande Energie.
 
 Settings shows save progress, success or failure beside the action. After a
 request timeout the save result can be unknown; inspect the device before retrying.
