@@ -86,7 +86,7 @@ Purchase links were supplied by the project owner. Verify the actual board,
 connector pin mapping and meter electrical interface before assembly. A pull-up
 resistor does not make a push-pull 5 V signal safe for the ESP32. GPIO35 may also
 need an external button pull-up if the board does not provide one; verify it
-before enabling the access button. See [hardware](docs/HARDWARE.md).
+before enabling the access button. See [hardware](hardware/HARDWARE.md).
 
 **Disconnect the entire meter cable before connecting USB; never power from both.**
 
@@ -107,7 +107,7 @@ pio device monitor -b 115200
 Replace the example port with the actual device. **Disconnect the entire meter
 cable before connecting USB. Never power from USB and the meter simultaneously.**
 Confirm 16 MiB flash before using this partition layout. See
-[hardware](docs/HARDWARE.md) and [troubleshooting](docs/BUILD_TROUBLESHOOTING.md).
+[hardware](hardware/HARDWARE.md) and [troubleshooting](docs/BUILD_TROUBLESHOOTING.md).
 
 To build only an uploadable application package, without flashing:
 

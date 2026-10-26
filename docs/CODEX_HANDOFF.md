@@ -1,6 +1,6 @@
 # Development handoff
 
-Read AGENTS.md, REQUIREMENTS.md, HARDWARE.md, ARCHITECTURE.md and ROADMAP.md.
+Read AGENTS.md, REQUIREMENTS.md, ../hardware/HARDWARE.md, ARCHITECTURE.md and ROADMAP.md.
 The current code includes accepted M0–M6 functionality. Continue with the M7
 hardware/release checks in TEST_PLAN.md; do not describe the final release or
 unmeasured electrical compatibility as validated.

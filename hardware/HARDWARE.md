@@ -15,7 +15,7 @@
 
 With the display facing you and the USB-C port on the left, the access button
 is **S2, the lower-left button next to the USB-C port**. See the
-[front photo](../hardware/Front.jpg). The upper-left button is labelled S1 on the
+[front photo](Front.jpg). The upper-left button is labelled S1 on the
 board. The current firmware uses the logical name S1 for its GPIO35 access button;
 this naming clarification does not change the GPIO assignment or button behavior.
 
@@ -23,7 +23,7 @@ GPIO35 has no internal pull-up. Verify the onboard resistor before relying on bu
 
 ## P1 reference, conditional on compatible meter
 
-![RJ12 6P6C connector with six positions and six contacts](../hardware/RJ12_6P6C.jpg)
+![RJ12 6P6C connector with six positions and six contacts](RJ12_6P6C.jpg)
 
 The cable in the photo has the following color mapping, as supplied by the
 project owner:
@@ -43,6 +43,8 @@ photo's viewing angle or wire colors alone. Verify the actual contact numbering
 and continuity with the cable disconnected before using the conditional pinout
 below. The color mapping identifies this cable; it does not establish the
 meter's electrical pinout.
+
+![Illustrated board wiring, RJ12 cable colors and 10 kohm RX pull-up](Pinout.png)
 
 | P1 RJ12 pin | Signal | Proposed connection |
 | --- | --- | --- |
@@ -71,7 +73,7 @@ https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/periph
 The user accepted display/replay, S1/access, MQTT and web-update functionality.
 No electrical measurements, exact flashed image hash or long-run duration were
 supplied. Flash capacity, RX idle voltage/interface, meter power budget under
-radio load and GPIO35 pull-up remain M7 checks. See TEST_PLAN.md.
+radio load and GPIO35 pull-up remain M7 checks. See [test plan](../docs/TEST_PLAN.md).
 
 The software uses the ESP-IDF ST7789 driver: SPI2, 20 MHz, 240×135 landscape,
 XY swap and X mirror, gap 40/53, inversion enabled. Color rendering uses an

@@ -12,7 +12,7 @@ meter/board identification privately where appropriate. Check the enclosure fit,
 strain relief and antenna clearance; complete BOM/dimensions before release.
 
 **Disconnect the complete meter cable before USB. Never power from both sources.**
-Electrical checks must follow the conditional hardware guidance in HARDWARE.md;
+Electrical checks must follow the conditional hardware guidance in [HARDWARE.md](../hardware/HARDWARE.md);
 no mains-side intervention is part of this plan.
 
 Pass: verified compatible signal/supply, stable operation and no abnormal heating

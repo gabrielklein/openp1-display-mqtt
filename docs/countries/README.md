@@ -23,5 +23,5 @@ Add a page under `<country>/<provider-or-meter>.md` and list it above. Include:
 - Source of the settings, observed results and any unverified details.
 
 Do not include meter serial numbers, customer details, credentials or private
-network addresses. Reference the shared [hardware guidance](../HARDWARE.md)
+network addresses. Reference the shared [hardware guidance](../../hardware/HARDWARE.md)
 rather than assuming that all P1 connectors have the same electrical interface.

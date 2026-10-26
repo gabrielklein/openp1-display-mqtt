@@ -43,7 +43,7 @@ from the ESP32 UART RX input. Identify the actual activation/power contacts usin
 the meter's interface documentation before wiring; connector appearance alone is
 not sufficient. This page does not independently verify those electrical details.
 
-Use the conditional [hardware/pinout guidance](../../HARDWARE.md): meter data is
+Use the conditional [hardware/pinout guidance](../../../hardware/HARDWARE.md): meter data is
 routed to GPIO27, with a proposed 10 kΩ pull-up to 3.3 V for a compatible
 open-collector interface. Never connect a push-pull 5 V signal directly to RX.
 Disconnect the complete meter cable before USB; never power from both sources.

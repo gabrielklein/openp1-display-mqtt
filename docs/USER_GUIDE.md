@@ -16,7 +16,7 @@ The board profile targets a Tenstar TS0636G T-Display, classic ESP32, with 16 Mi
 flash. Meter UART RX uses GPIO27; GPIO16 is reserved for LCD DC. The proposed
 interface requires a compatible signal and a 10 kohm RX pull-up to 3.3 V.
 
-Review [hardware and conditional pinout](HARDWARE.md) before wiring. Confirm the
+Review [hardware and conditional pinout](../hardware/HARDWARE.md) before wiring. Confirm the
 meter interface, connector orientation, actual flash capacity and supply budget.
 The project does not establish universal P1 meter support.
 

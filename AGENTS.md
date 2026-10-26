@@ -1,6 +1,6 @@
 # Development instructions
 
-Read docs/REQUIREMENTS.md, docs/HARDWARE.md, docs/ARCHITECTURE.md and docs/ROADMAP.md first.
+Read docs/REQUIREMENTS.md, hardware/HARDWARE.md, docs/ARCHITECTURE.md and docs/ROADMAP.md first.
 
 Use PlatformIO + ESP-IDF with C++17-compatible application code. Keep meter parsing portable and independent from ESP-IDF. Pin platform and added dependencies. Do not substitute Arduino without an explicit architectural decision.
 
