@@ -69,6 +69,24 @@ These are related projects to evaluate, not a tested compatibility ranking.
 The reason for this implementation was the combination of an on-device display
 and a working solution for my particular setup.
 
+## Bill of materials (BOM)
+
+| Item | Quantity | Specification / purchase link |
+| --- | --- | --- |
+| ESP32 T-Display board | 1 | [Tenstar TS0636G T-Display](https://s.click.aliexpress.com/e/_EzsGsy2), 16 MiB flash profile |
+| P1 connector/cable | 1 | [RJ12 6P6C](https://s.click.aliexpress.com/e/_EJhce4K), six positions and six contacts |
+| RX pull-up resistor | 1 | **10 kΩ**, between GPIO27 (RX) and 3.3 V, for the proposed compatible open-collector interface |
+| Insulated wire and heat-shrink | As needed | Secure, insulated connections |
+| Nonconductive enclosure | 1 | Sized for the board, display, button and cable strain relief |
+
+Purchase links were supplied by the project owner. Verify the actual board,
+connector pin mapping and meter electrical interface before assembly. A pull-up
+resistor does not make a push-pull 5 V signal safe for the ESP32. GPIO35 may also
+need an external button pull-up if the board does not provide one; verify it
+before enabling the access button. See [hardware](docs/HARDWARE.md).
+
+**Disconnect the entire meter cable before connecting USB; never power from both.**
+
 ## Build and install
 
 ```sh
