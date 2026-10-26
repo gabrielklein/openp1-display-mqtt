@@ -14,9 +14,7 @@
 | Transmission mode | Push: unsolicited meter data |
 | Reported transmission interval | Every 5 seconds while ACTIVATE is connected to +5 V |
 
-Source: installation details supplied by the project owner. This is a profile for
-the reported installation, not independent manufacturer certification or a claim
-that every Romande Energie meter uses these settings. The reported payload length
+Source: installation details supplied by romande énergie. The reported payload length
 is not a fixed parser limit: HDLC frames and segmented notifications must still
 be handled according to their declared lengths and checksums. Do not truncate
 incoming data to 154 bytes.

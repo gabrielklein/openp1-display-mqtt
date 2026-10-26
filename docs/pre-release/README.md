@@ -9,3 +9,5 @@ Use ../../README.md and the documents in ../ for the current version. The active
 repository was reset to an anonymized snapshot; historical milestone labels are
 retained only to explain scope and reported acceptance. Archive documents are not
 part of the current navigation or release instructions.
+
+I kept this part because I find it interesting to follow how I did my 3-days development with codex.
