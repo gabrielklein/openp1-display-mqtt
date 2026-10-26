@@ -29,6 +29,36 @@ M7 hardware/electrical, prolonged real-meter and release checks remain open.
 The proposed board is a Tenstar TS0636G T-Display with 16 MiB flash; exact
 board/meter electrical compatibility still requires verification.
 
+## Why I built this
+
+I started with an existing ESP8266 P1-to-MQTT project, referred to locally as
+`esp8266_p1_mqtt`, but I could not get it working with my setup. I also wanted
+the readings directly on the device: a clear view of import/export power and
+phase voltages without opening a dashboard or checking MQTT messages.
+
+That led to OpenP1 Display: a version built around the ESP32 T-Display, with a
+local color screen, configurable MQTT outputs, a browser-based interface and
+web firmware updates. The compact MQTT summary format remains compatible with
+the previous setup. This reflects my experience with my hardware and meter;
+it is not a claim that the original project fails for other users.
+
+## Alternative projects
+
+- **Original ESP8266 P1-to-MQTT project (`esp8266_p1_mqtt`):** the starting point
+  for my earlier setup and MQTT topic/payload format. Its upstream repository
+  has not been identified in the local project, so no unverified link is listed.
+- **[AMS reader firmware](https://github.com/UtilitechAS/amsreader-firmware):**
+  another meter-reader firmware project with publicly available source. Check its supported hardware
+  and meter formats against your installation.
+- **[ESPHome DSMR component](https://esphome.io/components/sensor/dsmr/):**
+  an alternative for reading supported DSMR meters within an ESPHome setup.
+  A P1 connector alone does not establish protocol compatibility with this
+  project's HDLC/DLMS input.
+
+These are related projects to evaluate, not a tested compatibility ranking.
+The reason for this implementation was the combination of an on-device display
+and a working solution for my particular setup.
+
 ## Build and install
 
 ```sh
