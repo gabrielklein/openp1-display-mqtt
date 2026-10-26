@@ -1,0 +1,32 @@
+menu "OpenP1 input and display"
+config OPENP1_S1
+    bool "Enable S1 GPIO35 (verify external/onboard pull-up first)"
+    default n
+    help
+        GPIO35 has no internal pull-up. Enable only after verifying its resistor.
+        Short press grants Full for 300s; hold 8s resets Wi-Fi only.
+
+config OPENP1_DISPLAY
+    bool "Enable proposed T-Display ST7789 profile (not bench validated)"
+    default y
+config OPENP1_BAUD
+    int "Meter baud rate (unverified)"
+    range 300 115200
+    default 115200
+choice OPENP1_PARITY
+    prompt "Meter parity"
+    default OPENP1_PARITY_NONE
+config OPENP1_PARITY_NONE
+    bool "None"
+config OPENP1_PARITY_EVEN
+    bool "Even"
+config OPENP1_PARITY_ODD
+    bool "Odd"
+endchoice
+config OPENP1_TWO_STOP_BITS
+    bool "Use two stop bits"
+    default n
+config OPENP1_INVERT_RX
+    bool "Invert meter RX"
+    default y
+endmenu

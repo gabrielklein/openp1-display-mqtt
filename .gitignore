@@ -1,0 +1,15 @@
+.pio/
+build/
+sdkconfig
+sdkconfig.old
+.vscode/
+__pycache__/
+*.local.*
+captures/private/
+
+.git-local/
+openp1-history.bundle
+sdkconfig.*
+!sdkconfig.defaults
+
+dist/

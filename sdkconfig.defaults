@@ -1,0 +1,20 @@
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Browser and captive portal request headers exceed ESP-IDF's 512-byte default.
+CONFIG_HTTPD_MAX_REQ_HDR_LEN=4096
+
+# TLS always verifies the certificate chain and broker hostname.
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y
+# Recover STL allocation failures instead of aborting; reserve emergency exception storage.
+CONFIG_COMPILER_CXX_EXCEPTIONS=y
+CONFIG_COMPILER_CXX_EXCEPTIONS_EMG_POOL_SIZE=2048
+# Bound Wi-Fi traffic bursts within the ESP32 internal RAM budget (RX >= static RX 10).
+CONFIG_ESP_WIFI_DYNAMIC_RX_BUFFER_NUM=10
+CONFIG_ESP_WIFI_DYNAMIC_TX_BUFFER_NUM=8
+
+# Match the reference ESP8266 meter UART profile; saved runtime settings take precedence.
+CONFIG_OPENP1_BAUD=115200
+
+# Keep the previous bootable app until the new app passes startup checks.
+CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y
