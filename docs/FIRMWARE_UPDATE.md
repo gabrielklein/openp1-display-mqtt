@@ -13,7 +13,8 @@ python3 scripts/build-firmware.py --version 2026.10.27
 
 The script builds the pinned PlatformIO environment without upload or serial access.
 It verifies chip/project/version, image bounds and appended SHA256, then writes
-`dist/openp1-display-<date>.bin`, `.sha256` and `.json`. Use `--pio` for a specific
+`dist/openp1-display-<date>.bin`, `.sha256` and `.json`, plus a generated
+`dist/README.md` with device-update and USB flashing instructions. Use `--pio` for a specific
 PlatformIO executable or `--build-dir` for a custom build directory. Date-specific
 build directories and a version marker avoid stale descriptor versions.
 
@@ -72,3 +73,13 @@ arbitrary functional faults are not detected automatically. Keep a USB recovery 
 The user accepted the migration/update/version/settings/MQTT, invalid-image and
 rollback checklist. Exact flashed hash and detailed fault-injection procedures
 were not supplied. See TEST_PLAN.md for remaining hardware/release validation.
+
+## Official browser USB flasher
+
+Espressif's [ESP Tool (esptool-js)](https://espressif.github.io/esptool-js/)
+is a generic serial flasher that runs in a supported browser, such as desktop
+Chrome or Edge. See its [official repository](https://github.com/espressif/esptool-js).
+It is separate from the device's own firmware-update page. The generated
+`dist/README.md` lists the current project's file offsets and prerequisites.
+The application-only package is not a complete first-installation kit; full USB
+installation also needs matching bootloader, partitions and OTA metadata.

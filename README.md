@@ -117,7 +117,8 @@ python3 scripts/build-firmware.py
 python3 scripts/build-firmware.py --version 2026.10.27
 ```
 
-The script writes `dist/openp1-display-<date>.bin`, `.sha256` and `.json`.
+The script writes `dist/openp1-display-<date>.bin`, `.sha256` and `.json`,
+plus `dist/README.md` explaining device updates and USB flashing.
 Upload only the application `.bin` through **Full Settings → Firmware update**.
 See [firmware updates](docs/FIRMWARE_UPDATE.md) for migration and rollback.
 
