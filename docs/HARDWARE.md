@@ -23,6 +23,8 @@ GPIO35 has no internal pull-up. Verify the onboard resistor before relying on bu
 
 ## P1 reference, conditional on compatible meter
 
+![RJ12 6P6C connector with six positions and six contacts](../hardware/RJ12_6P6C.jpg)
+
 | P1 RJ12 pin | Signal | Proposed connection |
 | --- | --- | --- |
 | 1 | +5 V output | Board 5V |
