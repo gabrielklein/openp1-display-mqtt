@@ -29,6 +29,11 @@ M7 hardware/electrical, prolonged real-meter and release checks remain open.
 The proposed board is a Tenstar TS0636G T-Display with 16 MiB flash; exact
 board/meter electrical compatibility still requires verification.
 
+## Development note
+
+The code for this project was written by OpenAI Codex, guided by the project
+owner’s requirements, feedback and on-device testing.
+
 ## Documentation
 
 Start with the **[user guide](docs/USER_GUIDE.md)** for installation, Wi-Fi setup,
