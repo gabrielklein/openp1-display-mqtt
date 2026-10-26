@@ -224,7 +224,12 @@ and 180 seconds. Images are validated before boot selection, and NVS settings
 are preserved. A new image is confirmed after startup checks; pre-confirmation
 resets can roll back. This is not automatic detection of every later functional
 fault, and SHA256 is an integrity check rather than publisher authentication.
-See [firmware update reference](FIRMWARE_UPDATE.md) for recovery and full details.
+The build also produces a versioned ZIP with the application, bootloader,
+partition table, OTA metadata, checksums and a standalone flashing guide. Extract
+it for direct USB installation with esptool or Espressif's browser tool. PlatformIO
+upload is available from a source checkout. Never send the ZIP to the device updater.
+See [firmware update reference](FIRMWARE_UPDATE.md) for all four flashing methods,
+exact addresses and recovery details.
 
 ## 11. Troubleshoot
 

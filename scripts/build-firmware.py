@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and package the application-only ESP32 image for the Full-access web updater."""
+"""Build application OTA image and a ZIP with matching USB installation files."""
 from __future__ import annotations
 import argparse
 import datetime as dt
@@ -10,6 +10,7 @@ from pathlib import Path
 import shutil
 import struct
 import subprocess
+import zipfile
 
 
 def date_version(value: str) -> str:
@@ -50,75 +51,171 @@ def inspect_image(data: bytes, expected_version: str) -> dict[str, str | int]:
 
 
 def write_upload_guide(output: Path, image_name: str, version: str) -> None:
-    """Write installation guidance beside the application-only package."""
-    guide = f"""# OpenP1 Display — flashing guide
+    """Write a standalone guide used both in dist and inside the ZIP."""
+    guide = f"""# OpenP1 Display — installation guide ({version})
 
-Latest packaged version: **{version}**
 Application image: **{image_name}**
+Full installation kit: **openp1-display-{version}.zip**
 
-## Update through the device (recommended for an existing OTA installation)
+## Choose an installation method
 
-1. Keep the device powered and connected to Wi-Fi; open its displayed IP address.
-2. Obtain Full access. If enabled, a short S2 press grants it for five minutes.
-   S2 is the lower-left button next to USB-C, with the USB port on the left.
-3. Open Settings → Firmware update and select `{image_name}`.
-4. Upload and wait for validation/restart without interrupting power.
-5. Check the installed version, settings, meter readings and MQTT afterward.
+- Existing OTA-enabled device: upload the application .bin through its Settings.
+- First installation/recovery: extract the ZIP and flash all four binaries over
+  USB using esptool or Espressif's browser tool. No source checkout is required.
+- Building from source: use PlatformIO upload instead.
 
-Upload the .bin only. The .sha256 and .json files are checksum/metadata sidecars.
-Maximum application size: 3 MiB. Settings are preserved. If the upload reply is
-lost, check the installed version before retrying. This application-only image
-cannot install the bootloader or migrate an old factory-only partition table.
+Before USB, disconnect the ENTIRE meter cable. Never power from meter and USB
+simultaneously. Confirm classic ESP32 with 16 MiB flash. Close any serial monitor.
 
-## First installation or recovery over USB
+## Device web updater
 
-Disconnect the ENTIRE meter cable before USB. Never power from meter and USB
-simultaneously. Confirm the board has 16 MiB flash and close any serial monitor.
+1. Open the device IP displayed on the LCD and obtain Full access. If enabled,
+   a short S2 press grants Full for five minutes (lower-left button beside USB-C,
+   with the display facing you and USB-C on the left).
+2. Open Settings → Firmware update and select `{image_name}` only.
+3. Upload, wait for validation/restart and check version, settings and MQTT.
 
-From the project source directory, the recommended complete USB installation is:
+Upload only the application .bin, NOT the ZIP, bootloader, partitions or metadata.
+The maximum application size is 3 MiB. Settings are preserved. If the reply is lost,
+check the installed version before retrying. Old factory-only layouts require one
+full USB installation before using this updater.
+
+## USB with esptool — extracted ZIP, no source required
+
+Install Espressif esptool in a Python environment, then run from the extracted
+ZIP directory. Replace /dev/ttyACM0 with your actual serial port (e.g. COM4).
+
+For esptool v5:
 
 ```sh
-pio run -e tenstar_tdisplay -t upload --upload-port /dev/ttyUSB0
+python -m esptool --chip esp32 --port /dev/ttyACM0 write-flash --flash-mode dio --flash-freq 40m --flash-size 16MB 0x1000 bootloader.bin 0x8000 partitions.bin 0x10000 {image_name} 0x310000 ota_data_initial.bin
 ```
 
-Replace the port with your actual board port. This builds/installs the matching
-bootloader, partition table, initial OTA metadata and factory application.
-A source-less first installation needs those matching binaries as well as this
-application; this dist directory is not a complete first-installation kit.
+For esptool v4 (including the project's pinned PlatformIO tool):
 
-## Official Espressif browser tool (USB, not the device web updater)
+```sh
+python -m esptool --chip esp32 --port /dev/ttyACM0 write_flash --flash_mode dio --flash_freq 40m --flash_size 16MB 0x1000 bootloader.bin 0x8000 partitions.bin 0x10000 {image_name} 0x310000 ota_data_initial.bin
+```
 
-Espressif maintains ESP Tool / esptool-js:
-https://espressif.github.io/esptool-js/
-Source and browser requirements: https://github.com/espressif/esptool-js
+These commands install the factory application and reset OTA selection so it
+boots. They do not erase NVS; do not request a whole-chip erase if you want to
+preserve settings. Resetting OTA metadata clears existing boot/rollback selection.
+Keep all files from the same kit and reset the device after flashing if needed.
 
-Use a supported Web Serial browser such as desktop Chrome or Edge. Connect the
-USB serial port and select files with explicit flash addresses. For a complete
-installation of THIS project's current classic-ESP32 16 MiB layout, the matching
-PlatformIO build outputs are:
+### Application-only USB update (limited case)
 
-| Address | File from the same tenstar_tdisplay build |
+If the matching bootloader/table are already installed AND factory boot is selected:
+
+```sh
+python -m esptool --chip esp32 --port /dev/ttyACM0 write-flash 0x10000 {image_name}
+```
+
+Use write_flash with esptool v4. The application offset is 0x10000, never 0x0 or
+0x1000. After OTA use, factory-only flashing may leave the device booting the old
+OTA slot. Use the device updater or the complete USB command above in that case.
+Do not guess an OTA slot or overwrite a running slot.
+
+## USB with PlatformIO — source checkout required
+
+From the project source directory (not the extracted ZIP):
+
+```sh
+pio device list
+pio run -e tenstar_tdisplay -t upload --upload-port /dev/ttyACM0
+```
+
+This builds and flashes the project's matching bootloader/table/OTA metadata/app.
+It may build a different image/version from this downloaded kit. The project's
+VERSION file controls the normal PlatformIO build version. The ZIP itself is
+not a PlatformIO project; use esptool/browser flashing for these exact binaries.
+
+## USB with the official Espressif browser tool
+
+1. Extract the ZIP. Disconnect the meter and connect a USB data cable.
+2. Open https://espressif.github.io/esptool-js/ in a Web Serial-capable desktop
+   browser such as Chrome or Edge. The official tool is maintained at
+   https://github.com/espressif/esptool-js .
+3. Connect/select the board's serial port and allow browser access. If connection
+   fails, close other serial applications and follow the board's download-mode
+   procedure. S2 is the access button, not the GPIO0 boot/download button.
+4. Add these four files from the same extracted kit at the exact addresses:
+
+| Address | File |
 | --- | --- |
 | 0x1000 | bootloader.bin |
 | 0x8000 | partitions.bin |
+| 0x10000 | {image_name} |
 | 0x310000 | ota_data_initial.bin |
-| 0x10000 | {image_name} (application / firmware.bin) |
 
-Use the project's matching build outputs and flash parameters; do not mix
-versions/layouts. For the application use 0x10000, never 0x0 or 0x1000. Do not
-manually overwrite a running OTA slot. After prior OTA use, writing the factory
-application alone may not change which slot boots: prefer the device updater,
-or a deliberate full USB recovery with the matching initial OTA metadata.
-Do not erase all flash if you want to preserve NVS settings. Resetting OTA
-metadata clears the selected OTA boot/rollback state. The browser tool is a
-manual generic flasher, not an OpenP1-specific one-click installer.
+5. Choose DIO flash mode, 40 MHz flash frequency and 16 MB flash size. Do not
+   erase all flash if preserving NVS settings. Program and wait for completion.
+6. Reset/disconnect-reconnect the board if needed, then check the LCD/version,
+   Wi-Fi, stored settings, readings and MQTT.
 
-For detailed instructions in the project see docs/FIRMWARE_UPDATE.md and
-hardware/HARDWARE.md. Date versions are not unique build IDs; compare SHA256
-when identifying an exact file. No upload or device access is performed by the
-build/package script.
+This is generic USB flashing, separate from the module's own Wi-Fi update page.
+Never upload the ZIP as a binary. Complete USB installation resets OTA selection.
+
+## Package integrity and recovery
+
+SHA256SUMS lists every binary's checksum. `sha256sum -c SHA256SUMS` checks the
+extracted files on systems providing that command. The .json sidecar describes
+the application. SHA256 verifies integrity, not publisher identity. Date versions
+can be rebuilt; use the hash to identify an exact image.
+
+Startup confirmation/rollback applies to OTA boots, not a newly written factory
+image. Keep a USB recovery path. Further details in the source repository:
+docs/FIRMWARE_UPDATE.md and hardware/HARDWARE.md. The build script never flashes
+hardware or opens a serial device.
 """
     (output / "README.md").write_text(guide, encoding="utf-8")
+
+
+def package_firmware(build: Path, output: Path, version: str) -> Path:
+    """Package only named public artifacts from one completed PlatformIO build."""
+    data = (build / "firmware.bin").read_bytes()
+    info = inspect_image(data, version)
+    support = {name: (build / name).read_bytes() for name in
+               ("bootloader.bin", "partitions.bin", "ota_data_initial.bin")}
+    if not support["bootloader.bin"] or support["bootloader.bin"][0] != 0xE9:
+        raise ValueError("Missing or invalid ESP32 bootloader")
+    table = support["partitions.bin"]
+    entries: dict[str, tuple[int, int, int, int]] = {}
+    for pos in range(0, len(table) - 31, 32):
+        magic, kind, subtype, offset, size, label, _ = struct.unpack_from("<HBBII16sI", table, pos)
+        if magic != 0x50AA:
+            break
+        entries[label.split(b"\0", 1)[0].decode("ascii")] = (kind, subtype, offset, size)
+    expected = {"nvs": (1, 2, 0x9000, 0x6000), "factory": (0, 0, 0x10000, 0x300000),
+                "otadata": (1, 0, 0x310000, 0x2000), "ota_0": (0, 0x10, 0x320000, 0x300000),
+                "ota_1": (0, 0x11, 0x620000, 0x300000)}
+    if any(entries.get(key) != value for key, value in expected.items()):
+        raise ValueError("USB guide requires the project's matching 16 MiB OTA layout")
+    if support["ota_data_initial.bin"] != b"\xff" * 8192:
+        raise ValueError("Expected blank initial OTA metadata, not device-specific data")
+    output.mkdir(parents=True, exist_ok=True)
+    stem = f"openp1-display-{version}"
+    image_name = stem + ".bin"
+    files = {image_name: data, **support}
+    files[stem + ".sha256"] = f"{info['sha256']}  {image_name}\n".encode()
+    files[stem + ".json"] = (json.dumps(info, indent=2) + "\n").encode()
+    files["SHA256SUMS"] = "".join(
+        f"{hashlib.sha256(content).hexdigest()}  {name}\n"
+        for name, content in files.items() if name.endswith(".bin")).encode()
+    write_upload_guide(output, image_name, version)
+    files["README.md"] = (output / "README.md").read_bytes()
+    # Keep loose binaries for the device updater and manual browser selection.
+    for name, content in files.items():
+        (output / name).write_bytes(content)
+    archive = output / (stem + ".zip")
+    temporary = archive.with_suffix(".zip.tmp")
+    try:
+        with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
+            for name, content in files.items():
+                bundle.writestr(name, content)
+        temporary.replace(archive)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return archive
 
 
 def main() -> int:
@@ -142,19 +239,12 @@ def main() -> int:
         subprocess.run([str(pio), "run", "-e", "tenstar_tdisplay", "-t", "clean"], cwd=root, env=env, check=True)
     # A version-specific build directory prevents cached descriptors from using another version.
     subprocess.run([str(pio), "run", "-e", "tenstar_tdisplay"], cwd=root, env=env, check=True)
-    source = build / "tenstar_tdisplay/firmware.bin"
-    data = source.read_bytes()
-    info = inspect_image(data, args.version)
+    output = args.output_dir.resolve()
+    archive = package_firmware(build / "tenstar_tdisplay", output, args.version)
     build.mkdir(parents=True, exist_ok=True)
     marker.write_text(args.version + "\n")
-    output = args.output_dir.resolve()
-    output.mkdir(parents=True, exist_ok=True)
-    target = output / f"openp1-display-{args.version}.bin"
-    target.write_bytes(data)
-    target.with_suffix(".sha256").write_text(f"{info['sha256']}  {target.name}\n")
-    target.with_suffix(".json").write_text(json.dumps(info, indent=2) + "\n")
-    write_upload_guide(output, target.name, args.version)
-    print(f"Web-update image: {target}\nVersion: {args.version}\nSHA256: {info['sha256']}")
+    print(f"Web-update image: {output / ('openp1-display-' + args.version + '.bin')}\n"
+          f"USB installation ZIP: {archive}\nGuide: {output / 'README.md'}")
     return 0
 
 
