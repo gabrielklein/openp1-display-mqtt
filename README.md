@@ -1,8 +1,28 @@
 # OpenP1 Display
 
-ESP32 P1 energy-meter reader with a color LCD, local web dashboard, MQTT and
-web firmware updates. Built with PlatformIO, pinned `espressif32@6.9.0`,
-ESP-IDF 5.3.1 and C++17-compatible application code. MIT licence.
+OpenP1 Display is an ESP32 device that reads electricity-meter data through the
+P1 port and shows how much power you are importing from or exporting to the grid.
+A color screen gives an at-a-glance view, while Wi-Fi connects the readings to a
+local web dashboard and your home automation system.
+
+- **Live color display:** large import/export power, three-phase voltages,
+  Wi-Fi strength, MQTT status and a receive activity indicator.
+- **Local web dashboard:** net-power gauge, phase readings, energy totals,
+  connection status and read-only raw/decoded diagnostics.
+- **MQTT and Home Assistant:** configurable topic prefix, optional Discovery,
+  JSON state, compact text summaries, individual OBIS values and raw/HDLC hex.
+  Optional TLS verifies the broker certificate and hostname.
+- **Web firmware upgrades:** upload an application `.bin` from Full-access
+  Settings, with image validation, date-based versions and startup rollback.
+- **Browser configuration:** Wi-Fi provisioning, persistent UART/MQTT settings,
+  access policies, screen rotation and configurable power-gauge range.
+- **Simulation mode:** replay an editable anonymized sequence through the same
+  parser, with MQTT data isolated under `/simulation`.
+
+![OpenP1 Display connected to a meter P1 port, showing live import power and three-phase voltages](hardware/LiveDevice.jpg)
+
+Built with PlatformIO, pinned `espressif32@6.9.0`, ESP-IDF 5.3.1 and
+C++17-compatible application code. MIT licence.
 
 The current software through M6 is implemented and accepted by user report.
 M7 hardware/electrical, prolonged real-meter and release checks remain open.
