@@ -25,6 +25,25 @@ GPIO35 has no internal pull-up. Verify the onboard resistor before relying on bu
 
 ![RJ12 6P6C connector with six positions and six contacts](../hardware/RJ12_6P6C.jpg)
 
+The cable in the photo has the following color mapping, as supplied by the
+project owner:
+
+| Contact number | Wire color in this cable |
+| --- | --- |
+| 1 | White |
+| 2 | Black |
+| 3 | Red |
+| 4 | Green |
+| 5 | Yellow |
+| 6 | Blue |
+
+**These colors are not a wiring standard.** Other RJ12 cables may use different
+colors or reverse the contact order. Do not infer contact numbering from the
+photo's viewing angle or wire colors alone. Verify the actual contact numbering
+and continuity with the cable disconnected before using the conditional pinout
+below. The color mapping identifies this cable; it does not establish the
+meter's electrical pinout.
+
 | P1 RJ12 pin | Signal | Proposed connection |
 | --- | --- | --- |
 | 1 | +5 V output | Board 5V |
