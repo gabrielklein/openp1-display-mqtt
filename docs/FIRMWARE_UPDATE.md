@@ -101,6 +101,25 @@ installed version. Close serial monitors first. Do not erase all flash when
 preserving NVS settings. Full USB installation resets the OTA boot/rollback
 selection to factory. Never upload the ZIP as a single flash image.
 
+## Convenience scripts (source checkout)
+
+```sh
+./create-dist.sh
+./create-dist.sh --version 2026.10.27
+./flash-dist.sh /dev/ttyACM0 --dry-run
+./flash-dist.sh /dev/ttyACM0
+```
+
+The build wrapper runs `python3 scripts/build-firmware.py` and forwards its
+arguments. The flash wrapper does not build: it uses the latest complete loose
+package identified by `dist/SHA256SUMS`, verifies each binary's checksum and
+flashes the factory app, bootloader, partitions and blank OTA metadata. Existing
+other date-named binaries in dist are not selected by filename sorting. It finds
+esptool in python3 or the local PlatformIO installation and supports v4/v5 syntax.
+Dry run checks the files and prints the command without opening a serial device.
+Disconnect the entire meter cable first. This resets OTA selection, not NVS;
+there is no whole-chip erase. The scripts live in the source checkout, not the ZIP.
+
 ## Direct USB with esptool
 
 From the extracted ZIP directory, replace the port and date below. With esptool v5:

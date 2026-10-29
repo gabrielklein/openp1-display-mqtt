@@ -110,6 +110,19 @@ cable before connecting USB. Never power from USB and the meter simultaneously.*
 Confirm 16 MiB flash before using this partition layout. See
 [hardware](hardware/HARDWARE.md) and [troubleshooting](docs/BUILD_TROUBLESHOOTING.md).
 
+Two convenience scripts are available at the project root:
+
+```sh
+./create-dist.sh                         # Build and package dist; no flashing
+./flash-dist.sh /dev/ttyACM0 --dry-run    # Verify files and preview the command
+./flash-dist.sh /dev/ttyACM0              # Flash the latest complete dist package
+```
+
+Replace the port with your actual device. Disconnect the entire meter cable
+before USB. The flash script verifies checksums, uses esptool (installed for
+python3 or supplied by PlatformIO), and flashes all four matching binaries.
+It resets OTA selection to factory without a whole-chip erase. It does not rebuild.
+
 To build only an uploadable application package, without flashing:
 
 ```sh

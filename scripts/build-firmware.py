@@ -115,6 +115,22 @@ Use write_flash with esptool v4. The application offset is 0x10000, never 0x0 or
 OTA slot. Use the device updater or the complete USB command above in that case.
 Do not guess an OTA slot or overwrite a running slot.
 
+## Convenience scripts — source checkout required
+
+From the project root, `./create-dist.sh` builds this package. It forwards build
+arguments, e.g. `./create-dist.sh --version {version}`. To flash the latest complete
+loose package without rebuilding:
+
+```sh
+./flash-dist.sh /dev/ttyACM0 --dry-run
+./flash-dist.sh /dev/ttyACM0
+```
+
+The flash script verifies dist/SHA256SUMS and uses esptool v4/v5, including the
+PlatformIO-supplied tool if needed. Dry run never opens a serial device. The
+actual flash resets OTA selection to factory; disconnect the meter before USB.
+These scripts are in the source checkout, not the extracted ZIP.
+
 ## USB with PlatformIO — source checkout required
 
 From the project source directory (not the extracted ZIP):
