@@ -325,6 +325,9 @@ void decorate(display::View& view, std::uint64_t now) {
         } else {
             std::snprintf(view.lines[6].data(),21,"%s",connected?"WiFi connected":"WiFi reconnecting");
             std::snprintf(view.lines[7].data(),21,"%s",connected?ip:"Retry <= 60s");
+#ifdef CONFIG_OPENP1_S2
+            if (!connected) std::snprintf(view.lines[7].data(),21,"Hold S2 8s to reset");
+#endif
         }
     }
     if(reset_countdown){

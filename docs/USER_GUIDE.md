@@ -89,7 +89,13 @@ eight-second hold; otherwise USB servicing is required. Other settings remain.
 | Wi-Fi icon | Connection and signal strength |
 | MQ | Green connected, amber waiting, red error, gray disabled |
 | RX pulse | A successfully decoded notification, including simulation |
-| Footer | IP/setup/access information |
+| Footer | IP/setup/access information; disconnected Wi-Fi reset hint when S2 is enabled |
+
+While configured Wi-Fi is disconnected, an S2-enabled device shows
+**Hold S2 8s to reset** beside **WiFi reconnecting**. Hold the lower-left S2
+button for eight seconds to reset Wi-Fi only and reopen provisioning. The hint
+disappears when Wi-Fi connects; setup instructions and the active hold countdown
+take priority. Builds with S2 disabled retain the reconnect-delay message.
 
 The web dashboard shows net power above Wi-Fi quality, then connection/source and
 readings. Net power is import OBIS `1-0:1.7.0` minus export `1-0:2.7.0`. Export is

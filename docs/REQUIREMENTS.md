@@ -36,7 +36,9 @@ These requirements describe the current software. Historical notes under
 ## Display, web and diagnostics
 
 - Color LCD: large import/export power, three phase voltages, Wi-Fi/MQTT state,
-  receive pulse and IP/access footer. Persistent optional 180° rotation.
+  receive pulse and IP/access footer. While configured Wi-Fi is disconnected,
+  S2-enabled builds show “Hold S2 8s to reset”; provisioning and the active reset
+  countdown retain priority. Persistent optional 180° rotation.
 - Offline responsive dashboard: net-power gauge above Wi-Fi, then connection/source;
   timestamps, stale state and decoded-message count. Gauge defaults to ±5 kW.
 - Missing export may mean zero only for the derived gauge/LCD. Missing import or

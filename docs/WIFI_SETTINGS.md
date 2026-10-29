@@ -52,3 +52,18 @@ new milestone tag or real-device acceptance is claimed.
    if the verified board profile enables S2.
 5. Only with a recovery path available, verify invalid credentials show the
    existing reconnect state and the enabled S2 reset restores provisioning.
+
+## Disconnected LCD hint — 2026-10-29
+
+Configured devices with S2 enabled show `Hold S2 8s to reset` beside
+`WiFi reconnecting` until connected. Setup guidance, active reset countdown and
+the existing alternating temporary-access status retain their precedence.
+S2-disabled builds keep the retry-delay text. Power and phase readings remain
+visible; reset behavior and automatic reconnection are unchanged.
+
+Validated the footer string/buffer and 240-pixel layout bounds, rebuilt the
+pinned ESP-IDF firmware and package, checked all binary checksums and ZIP
+integrity, and verified the hint is embedded in the packaged application.
+The same-date `2026.10.29` artifacts were regenerated; their checksum identifies
+the new image. Physical LCD/reconnect/button validation remains a device check.
+No hardware was flashed.
