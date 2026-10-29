@@ -37,3 +37,10 @@ Capture export/import/copy/download, advanced replay controls and the MQTT debug
 console are outside the agreed scope. Do not reintroduce them as unfinished work.
 Historical development notes are isolated in pre-release/ and are not current
 requirements, release instructions or references to available commits/tags.
+
+## Post-M7 — Wi-Fi settings
+
+Full Settings now supports nearby-network scanning and manual replacement of
+Wi-Fi credentials, applied after restart. See [Wi-Fi settings validation](WIFI_SETTINGS.md).
+M7 acceptance covers the earlier snapshot; this addition requires a real-device
+acceptance check. No new milestone tag or hardware flash is implied.

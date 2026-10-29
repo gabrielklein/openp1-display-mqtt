@@ -54,7 +54,10 @@ The reserved storage partition remains unmounted; there is no capture filesystem
 ## Configuration and access
 
 Versioned NVS records preserve configuration across restart. UART and simulation
-settings are applied at boot; display changes apply at refresh. Access-policy
+settings are applied at boot; display changes apply at refresh. Full-only Wi-Fi
+settings replace the existing NVS Wi-Fi record and schedule a restart without
+changing the live connection. Settings and setup share the bounded scan worker;
+station scans require Full access and canonical Host/origin. Access-policy
 saves persist then schedule restart. The network worker owns S2 and delayed reboot.
 
 Full/origin/CSRF checks protect settings; ongoing upload/stream checks enforce

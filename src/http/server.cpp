@@ -40,6 +40,35 @@ esp_err_t json(httpd_req_t* r, cJSON* root) {
 bool permits(std::uint8_t required) { Guard guard; return grant.permits(policy,setup,required,now_ms()); }
 bool allowed() { return permits(1); }
 bool provisioning() { Guard guard; return setup; }
+esp_err_t wifi_scan(httpd_req_t* r) {
+    Scan copy; bool busy;
+    { Guard guard;
+        busy=trying || pending;
+        if (!busy && scan.state!=ScanState::Queued && scan.state!=ScanState::Running &&
+            now_ms()>=scan.refresh_after) {
+            scan.state=ScanState::Queued; scan.refresh_after=now_ms()+10000;
+        }
+        copy=scan;
+    }
+    if (busy) return reply(r,"409 Conflict","{}");
+    if (copy.state==ScanState::Failed) return reply(r,"503 Service Unavailable","{}");
+    if (copy.state!=ScanState::Ready)
+        return reply(r,"202 Accepted","{\"state\":\"scanning\"}");
+    using Json=std::unique_ptr<cJSON,decltype(&cJSON_Delete)>;
+    Json root(cJSON_CreateObject(),cJSON_Delete);
+    auto* list=root?cJSON_AddArrayToObject(root.get(),"networks"):nullptr;
+    if (!list || !cJSON_AddStringToObject(root.get(),"state","ready"))
+        return reply(r,"503 Service Unavailable","{}");
+    for (std::size_t i=0;i<copy.count && i<copy.networks.size();++i) {
+        Json item(cJSON_CreateObject(),cJSON_Delete);
+        if (!item || !cJSON_AddStringToObject(item.get(),"ssid",copy.networks[i].ssid) ||
+            !cJSON_AddNumberToObject(item.get(),"rssi",copy.networks[i].rssi) ||
+            !cJSON_AddBoolToObject(item.get(),"secure",copy.networks[i].secure) ||
+            !cJSON_AddItemToArray(list,item.get()))return reply(r,"503 Service Unavailable","{}");
+        item.release();
+    }
+    return json(r,root.release());
+}
 static esp_err_t get_impl(httpd_req_t* r) {
     // Wildcard handler: every request, including reused connections, checks current state.
     const bool configuring = provisioning();
@@ -75,29 +104,7 @@ static esp_err_t get_impl(httpd_req_t* r) {
             return json(r,root);
         }
         if (!std::strcmp(path,"/setup/scan")) {
-            Scan copy; bool busy;
-            { Guard guard;
-                busy=trying || pending;
-                if (!busy && scan.state!=ScanState::Queued && scan.state!=ScanState::Running &&
-                    now_ms()>=scan.refresh_after) {
-                    scan.state=ScanState::Queued; scan.refresh_after=now_ms()+10000;
-                }
-                copy=scan;
-            }
-            if (busy) return reply(r,"409 Conflict","{}");
-            if (copy.state==ScanState::Failed) return reply(r,"503 Service Unavailable","{}");
-            if (copy.state!=ScanState::Ready)
-                return reply(r,"202 Accepted","{\"state\":\"scanning\"}");
-            auto* root=cJSON_CreateObject(); cJSON_AddStringToObject(root,"state","ready");
-            auto* list=cJSON_AddArrayToObject(root,"networks");
-            for (std::size_t i=0;i<copy.count;++i) {
-                auto* item=cJSON_CreateObject();
-                cJSON_AddStringToObject(item,"ssid",copy.networks[i].ssid);
-                cJSON_AddNumberToObject(item,"rssi",copy.networks[i].rssi);
-                cJSON_AddBoolToObject(item,"secure",copy.networks[i].secure);
-                cJSON_AddItemToArray(list,item);
-            }
-            return json(r,root);
+            return wifi_scan(r);
         }
         if (!std::strcmp(path,"/setup") || !std::strcmp(path,"/"))
             return reply(r,"200 OK",setup_page,"text/html; charset=utf-8");
@@ -111,7 +118,7 @@ static esp_err_t get_impl(httpd_req_t* r) {
         return reply(r,"403 Forbidden",access_page,"text/html; charset=utf-8");
     if (!allowed()) return denied(r);
     if(!std::strcmp(path,"/settings") || !std::strcmp(path,"/api/v1/access") ||
-       !std::strcmp(path,"/api/v1/firmware") || !std::strcmp(path,"/api/v1/serial") || !std::strcmp(path,"/api/v1/simulation") || !std::strcmp(path,"/api/v1/mqtt/status") || !std::strcmp(path,"/api/v1/display") || !std::strcmp(path,"/api/v1/session") || !std::strcmp(path,"/api/v1/mqtt"))return admin_get(r);
+       !std::strcmp(path,"/api/v1/wifi/scan") || !std::strcmp(path,"/api/v1/firmware") || !std::strcmp(path,"/api/v1/serial") || !std::strcmp(path,"/api/v1/simulation") || !std::strcmp(path,"/api/v1/mqtt/status") || !std::strcmp(path,"/api/v1/display") || !std::strcmp(path,"/api/v1/session") || !std::strcmp(path,"/api/v1/mqtt"))return admin_get(r);
     if(!std::strcmp(path,"/api/v1/events"))return stream_open(r);
     if(!std::strcmp(path,"/diagnostics"))return reply(r,"200 OK",diagnostics_page,"text/html; charset=utf-8");
     if (!std::strcmp(path,"/")) return reply(r,"200 OK",dashboard,"text/html; charset=utf-8");

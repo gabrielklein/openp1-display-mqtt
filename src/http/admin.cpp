@@ -2,6 +2,7 @@
 #include "support/memory.hpp"
 #include "connectivity/internal.hpp"
 #include "request.hpp"
+#include "connectivity/model.hpp"
 #include "config/serial.hpp"
 #include "display/dashboard.hpp"
 #include "mqtt/service.hpp"
@@ -36,6 +37,7 @@ esp_err_t admin_get(httpd_req_t* r){
     }
     if(!permits(2))return reply(r,"403 Forbidden","{\"error\":{\"code\":\"full_required\",\"message\":\"Full access required: press and release S2, then retry.\"}}");
     if(!same_origin(r,false))return reply(r,"403 Forbidden","{\"error\":{\"code\":\"station_origin_required\",\"message\":\"Use the device IP shown on its display in a regular browser.\"}}");
+    if(!std::strcmp(r->uri,"/api/v1/wifi/scan"))return wifi_scan(r);
     if(!std::strcmp(r->uri,"/api/v1/firmware"))return firmware_get(r);
     if(!std::strcmp(r->uri,"/settings"))return reply(r,"200 OK",settings_page,"text/html; charset=utf-8");
     if(!std::strcmp(r->uri,"/api/v1/session")){
@@ -89,12 +91,13 @@ esp_err_t admin_get(httpd_req_t* r){
 static esp_err_t put_impl(httpd_req_t* r){
     if(!std::strcmp(r->uri,"/api/v1/firmware"))return firmware_put(r);
     if(!permits(2)||!same_origin(r,true))return denied(r);
+    const bool wifi_route=!std::strcmp(r->uri,"/api/v1/wifi");
     const bool serial_route=!std::strcmp(r->uri,"/api/v1/serial");
     const bool access_route=!std::strcmp(r->uri,"/api/v1/access");
     const bool display_route=!std::strcmp(r->uri,"/api/v1/display");
     const bool simulation_route=!std::strcmp(r->uri,"/api/v1/simulation");
-    if(!serial_route && !access_route && !display_route && !simulation_route && std::strcmp(r->uri,"/api/v1/mqtt"))return reply(r,"404 Not Found","{}");
-    const std::size_t limit=serial_route?256:(access_route||display_route)?64:8192;
+    if(!wifi_route && !serial_route && !access_route && !display_route && !simulation_route && std::strcmp(r->uri,"/api/v1/mqtt"))return reply(r,"404 Not Found","{}");
+    const std::size_t limit=wifi_route?768:serial_route?256:(access_route||display_route)?64:8192;
     if(!r->content_len||r->content_len>limit)return reply(r,"400 Bad Request","{}");
     auto body=memory::buffer(r->content_len+1);
     if(!body)return reply(r,"503 Service Unavailable","{}");
@@ -109,7 +112,36 @@ static esp_err_t put_impl(httpd_req_t* r){
     if(!root)return reply(r,"400 Bad Request","{}");
     static std::uint64_t write_after=0;
     if(now_ms()<write_after)return reply(r,"429 Too Many Requests","{}");
-    if(serial_route){
+    if(wifi_route){
+        // Do not return credentials, even on validation/storage failures.
+        struct Secrets {
+            cJSON* root;
+            wifi_config_t config{};
+            ~Secrets(){
+                for(auto* item=root?root->child:nullptr;item;item=item->next)
+                    if(cJSON_IsString(item))std::memset(item->valuestring,0,std::strlen(item->valuestring));
+                auto* bytes=reinterpret_cast<volatile unsigned char*>(&config);
+                for(std::size_t i=0;i<sizeof(config);++i)bytes[i]=0;
+            }
+        } secrets{root.get(),{}};
+        const auto* ssid=cJSON_GetObjectItemCaseSensitive(root.get(),"ssid");
+        const auto* password=cJSON_GetObjectItemCaseSensitive(root.get(),"password");
+        if(!cJSON_IsObject(root.get())||cJSON_GetArraySize(root.get())!=2||
+            !cJSON_IsString(ssid)||!cJSON_IsString(password)||
+            !credentials_valid(ssid->valuestring,password->valuestring))return reply(r,"400 Bad Request","{}");
+        std::memcpy(secrets.config.sta.ssid,ssid->valuestring,std::strlen(ssid->valuestring));
+        std::memcpy(secrets.config.sta.password,password->valuestring,std::strlen(password->valuestring));
+        bool wifi_busy;
+        {Guard guard;wifi_busy=pending||trying||scan.state==ScanState::Queued||scan.state==ScanState::Running;}
+        if(wifi_busy)return reply(r,"409 Conflict","{}");
+        if(!permits(2))return denied(r);
+        nvs_handle_t store;
+        if(nvs_open("openp1",NVS_READWRITE,&store)!=ESP_OK)return reply(r,"503 Service Unavailable","{}");
+        auto status=nvs_set_blob(store,"wifi",&secrets.config,sizeof(secrets.config));
+        if(status==ESP_OK)status=nvs_commit(store);
+        nvs_close(store);
+        if(status!=ESP_OK)return reply(r,"503 Service Unavailable","{}");
+    }else if(serial_route){
         input::SerialSettings config;if(!serial::get(config))return reply(r,"503 Service Unavailable","{}");
         bool baud=false,parity=false,stop=false,inverted=false;
         if(!cJSON_IsObject(root.get())||!root->child)return reply(r,"400 Bad Request","{}");
@@ -189,7 +221,7 @@ static esp_err_t put_impl(httpd_req_t* r){
     }
     write_after=now_ms()+1000;
     const auto result=reply(r,"200 OK","{\"saved\":true}");
-    if(result==ESP_OK&&(simulation_route||access_route||serial_route))simulation::request_restart();
+    if(result==ESP_OK&&(wifi_route||simulation_route||access_route||serial_route))simulation::request_restart();
     return result;
 }
 esp_err_t put(httpd_req_t* r){

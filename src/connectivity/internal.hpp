@@ -47,6 +47,7 @@ struct Guard {
 esp_err_t reply(httpd_req_t* request,const char* code,const char* body,const char* type="application/json");
 esp_err_t denied(httpd_req_t* request);
 esp_err_t json(httpd_req_t* request,cJSON* root);
+esp_err_t wifi_scan(httpd_req_t* request);
 esp_err_t admin_get(httpd_req_t* request);
 esp_err_t get(httpd_req_t* request);
 esp_err_t post(httpd_req_t* request);

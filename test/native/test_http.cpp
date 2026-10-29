@@ -148,6 +148,56 @@ int main() {
         assert(r.status==(p==2?"200 OK":"403 Forbidden"));
     }
     for(std::uint8_t p=0;p<3;++p){policy=p;r=request("/api/v1/serial");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);assert(r.status==(p==2?"200 OK":"403 Forbidden"));}
+    // Station Wi-Fi scan/configuration: Full only, no credential readback.
+    scan={};
+    for(std::uint8_t p=0;p<3;++p){
+        policy=p;r=request("/api/v1/wifi/scan");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);
+        assert(r.status==(p==2?"202 Accepted":"403 Forbidden"));
+    }
+    policy=2;scan.state=ScanState::Ready;scan.count=1;scan.refresh_after=now_ms()+10000;
+    std::strcpy(scan.networks[0].ssid,"<untrusted>");
+    r=request("/api/v1/wifi/scan");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);
+    assert(r.status=="200 OK"&&r.response.find("<untrusted>")!=std::string::npos);
+    r=request("/api/v1/wifi/scan");r.headers["Host"]="evil.example";get(&r);assert(r.status=="403 Forbidden");
+    setup=true;r=request("/api/v1/wifi/scan");get(&r);assert(r.status=="403 Forbidden");setup=false;scan={};
+    auto wifi_request=[&](const std::string& body){
+        fake_time_us+=2000000;r=request("/api/v1/wifi");r.headers["Host"]=ip;r.headers["Origin"]=std::string("http://")+ip;
+        r.headers["X-CSRF-Token"]="test-token";r.body=body;r.content_len=r.body.size();
+    };
+    auto wifi_put=[&](const std::string& body){wifi_request(body);put(&r);};
+    const std::string wifi_body=R"({"ssid":"new-network","password":"never-return-this"})";
+    wifi_put(wifi_body);assert(r.status=="200 OK");
+    wifi_config_t saved_wifi{};std::size_t wifi_size=sizeof(saved_wifi);
+    assert(nvs_get_blob(1,"wifi",&saved_wifi,&wifi_size)==ESP_OK);
+    assert(std::strcmp(reinterpret_cast<char*>(saved_wifi.sta.ssid),"new-network")==0);
+    assert(std::strcmp(reinterpret_cast<char*>(saved_wifi.sta.password),"never-return-this")==0);
+    assert(r.response.find("new-network")==std::string::npos&&r.response.find("never-return-this")==std::string::npos);
+    assert(!openp1::simulation::restart_due(now_ms()+1499)&&openp1::simulation::restart_due(now_ms()+1500));
+    const auto previous_wifi=fake_nvs.at("wifi");
+    for(const char* bad:{"{}","[]",R"({"ssid":"","password":""})",R"({"ssid":"home"})",
+        R"({"ssid":"home","password":"short"})",R"({"ssid":1,"password":""})",
+        R"({"ssid":"a","ssid":"b"})",R"({"ssid":"a","password":"","extra":true})",
+        R"({"ssid":"a\u0000b","password":""})"}){
+        wifi_put(bad);assert(r.status=="400 Bad Request"&&fake_nvs.at("wifi")==previous_wifi);
+    }
+    wifi_put(R"({"ssid":")"+std::string(33,'s')+R"(","password":""})");assert(r.status=="400 Bad Request");
+    wifi_put(R"({"ssid":"home","password":")"+std::string(64,'p')+R"("})");assert(r.status=="400 Bad Request");
+    wifi_put(std::string(769,' '));assert(r.status=="400 Bad Request");
+    for(std::uint8_t p=0;p<2;++p){policy=p;wifi_put(wifi_body);assert(r.status=="403 Forbidden");}
+    policy=2;setup=true;wifi_put(wifi_body);assert(r.status=="403 Forbidden");setup=false;
+    wifi_request(wifi_body);r.headers["Origin"]="http://evil.example";put(&r);assert(r.status=="403 Forbidden");
+    wifi_request(wifi_body);r.headers["Host"]="evil.example";put(&r);assert(r.status=="403 Forbidden");
+    wifi_request(wifi_body);r.headers["X-CSRF-Token"]="bad";put(&r);assert(r.status=="403 Forbidden");
+    wifi_request(wifi_body);fake_after_recv=[](){policy=1;};put(&r);fake_after_recv=nullptr;
+    assert(r.status=="403 Forbidden"&&fake_nvs.at("wifi")==previous_wifi);policy=2;
+    for(const auto state:{ScanState::Queued,ScanState::Running}){
+        scan.state=state;wifi_put(wifi_body);assert(r.status=="409 Conflict");
+    }
+    scan={};fake_commit_ok=false;wifi_put(wifi_body);assert(r.status=="503 Service Unavailable");
+    assert(fake_nvs.at("wifi")==previous_wifi);fake_commit_ok=true;
+    wifi_put(R"({"ssid":")"+std::string(32,'s')+R"(","password":""})");assert(r.status=="200 OK");
+    assert(fake_nvs.at("wifi")[31]=='s'&&fake_nvs.at("wifi")[32]==0);
+    r=request("/api/v1/wifi");r.headers["Host"]=ip;r.headers.erase("Origin");get(&r);assert(r.status=="404 Not Found");
     auto serial_put=[&](const char* body){fake_time_us+=2000000;r=request("/api/v1/serial");r.headers["Host"]=ip;r.headers["Origin"]=std::string("http://")+ip;r.headers["X-CSRF-Token"]="test-token";r.body=body;r.content_len=r.body.size();put(&r);};
     policy=2;serial_put("{\"baud\":19200,\"parity\":\"Even\",\"stop_bits\":2,\"inverted\":false}");assert(r.status=="200 OK");
     openp1::input::SerialSettings uart_saved;assert(openp1::serial::get(uart_saved)&&uart_saved.baud==19200&&!uart_saved.inverted);assert(openp1::serial::boot_settings().baud==115200);

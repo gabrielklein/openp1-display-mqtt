@@ -66,6 +66,19 @@ not erase Wi-Fi credentials or open unrestricted settings.
 Use the displayed IP directly for Settings. Host/origin validation can reject
 alternate names or proxy access. The pages are served by the device without a CDN.
 
+### Change Wi-Fi from Settings
+
+With Full access, open **Settings → Wi-Fi**. Scan nearby networks and select one,
+or type a hidden network name manually. Enter the new password; an empty password
+means an open network, not keeping the old password. Saved credentials are never
+shown. Network names allow 1–32 UTF-8 bytes and passwords 8–63 bytes, or empty.
+
+**Save Wi-Fi and restart** replaces only the Wi-Fi record and restarts the device.
+The credentials are not tested before saving: check them carefully. The current
+browser connection closes. Join the new network and open the IP shown on the LCD.
+If the device cannot connect, an enabled S2 button can reset Wi-Fi with an
+eight-second hold; otherwise USB servicing is required. Other settings remain.
+
 ## 4. Read the screen and dashboard
 
 | Indicator | Meaning |

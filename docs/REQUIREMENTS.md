@@ -19,6 +19,9 @@ These requirements describe the current software. Historical notes under
 
 - Unconfigured: AP/captive DNS and Wi-Fi-only provisioning with scan/manual SSID.
   Configured: station mode with reconnect backoff; outages do not erase credentials.
+- Full Settings can scan nearby networks or accept a manual SSID/password,
+  persist replacement Wi-Fi credentials and restart. No saved credentials are
+  returned. Saving does not test the new connection; recovery guidance is shown.
 - Persist None/View/Full, default Full. No application password. None blocks
   readings/configuration but keeps MQTT/acquisition/LCD running. View is read-only.
 - Enforce access server-side on every request and ongoing stream/upload.

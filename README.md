@@ -14,7 +14,7 @@ local web dashboard and your home automation system.
   Optional TLS verifies the broker certificate and hostname.
 - **Web firmware upgrades:** upload an application `.bin` from Full-access
   Settings, with image validation, date-based versions and startup rollback.
-- **Browser configuration:** Wi-Fi provisioning, persistent UART/MQTT settings,
+- **Browser configuration:** Wi-Fi provisioning and changes from Settings, persistent UART/MQTT settings,
   access policies, screen rotation and configurable power-gauge range.
 - **Simulation mode:** replay an editable anonymized sequence through the same
   parser, with MQTT data isolated under `/simulation`.

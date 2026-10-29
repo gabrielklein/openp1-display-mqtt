@@ -15,6 +15,8 @@ station APIs. No wildcard CORS or application password is provided.
 | GET | `/api/v1/session` | Full | Session CSRF token |
 | GET | `/api/v1/access` | View | Persisted policy and temporary-grant state |
 | PUT | `/api/v1/access` | Full | Persist access policy and restart |
+| GET | `/api/v1/wifi/scan` | Full | Bounded nearby-network scan (202 while scanning) |
+| PUT | `/api/v1/wifi` | Full | Replace Wi-Fi credentials and restart; no credential GET |
 | GET, PUT | `/api/v1/serial` | Full | UART settings |
 | GET, PUT | `/api/v1/simulation` | Full | Enable flag, layer and bounded sequence |
 | GET, PUT | `/api/v1/display` | Full | Rotation and symmetric web gauge limit |
@@ -26,7 +28,7 @@ Settings PUTs require `X-CSRF-Token`, canonical station Host and same-origin
 Origin when supplied. JSON settings have strictly validated types/keys and
 bounded bodies. Firmware PUT instead uses `application/octet-stream`, at most
 3 MiB and a 180-second deadline. See [firmware update](FIRMWARE_UPDATE.md).
-Serial, simulation and policy saves schedule restart after successful persistence.
+Wi-Fi, serial, simulation and policy saves schedule restart after successful persistence.
 
 Values expose canonical `obis`, readable `obis_display`, numeric or string
 `value`, timestamps and stale status. Numeric values include raw/scaler/unit
@@ -34,6 +36,21 @@ information. Text/octet encodings are UTF-8 or lossless hex; identifiers remain
 strings so leading zeroes are not lost. Snapshots are bounded and independently
 sampled, not a historical capture. MQTT secrets are represented by configured
 flags rather than fetched credentials/certificate contents.
+
+Wi-Fi PUT requires exactly `{"ssid":"new-network","password":"new-password"}`.
+SSID is 1–32 UTF-8 bytes; password is empty for an open network or 8–63 bytes.
+The JSON body is limited to 768 bytes. The server rechecks Full access after
+receiving the body and refuses saves while a scan/setup connection is active.
+Credentials are persisted in the existing NVS Wi-Fi record; the active connection
+is unchanged until the delayed restart. The response contains only `saved: true`.
+No saved SSID/password is fetched. A failed storage commit does not schedule a
+restart. Scan results contain at most 16 SSID/RSSI/security entries and use the
+same worker as provisioning, with a ten-second refresh limit.
+
+The new connection is not tested before persistence. Incorrect credentials can
+make the device unreachable; there is no automatic fallback AP. An enabled S2
+button can reset Wi-Fi, otherwise USB recovery is needed. After a successful
+change, join the new network and use the IP shown on the LCD.
 
 ## Browser and setup routes
 

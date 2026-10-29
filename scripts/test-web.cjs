@@ -239,6 +239,36 @@ function wizard(state='success') {
   fresh.elements.serialBaud.value='19200';fresh.elements.serialParity.value='Even';fresh.elements.serialStop.value='2';fresh.elements.serialInverted.checked=false;
   await fresh.elements.serialForm.onsubmit(submit);assert.deepEqual(serialBody,{baud:19200,parity:'Even',stop_bits:2,inverted:false});
   assert.equal(fresh.elements.restartPage.hidden,false);assert.match(fresh.elements.restartMessage.textContent,/UART settings/);
+  // Wi-Fi Settings scan, validation, credential clearing and restart handoff.
+  let wifiWrites=0,wifiPayload,scanPolls=0;
+  const wifi=context(async(url,options)=>{
+    if(options?.method==='PUT'){wifiWrites++;wifiPayload=JSON.parse(options.body);return ok({saved:true})}
+    if(url==='/api/v1/wifi/scan')return ok(++scanPolls===1?{state:'scanning'}:{state:'ready',networks:[{ssid:'<untrusted>',rssi:-55,secure:true}]});
+    return ok({token:'csrf'});
+  });
+  vm.runInContext(scripts[2],wifi.sandbox);await settle();
+  await wifi.elements.wifiScan.onclick();assert.equal(scanPolls,2);
+  assert.equal(wifi.elements.wifiNetworks.children[1].value,'<untrusted>');
+  assert.match(wifi.elements.wifiNetworks.children[1].textContent,/<untrusted>.*-55.*secured/);
+  wifi.elements.wifiNetworks.value='<untrusted>';wifi.elements.wifiNetworks.onchange();assert.equal(wifi.elements.wifiSsid.value,'<untrusted>');
+  for(const [ssid,password] of [['',''],['é'.repeat(17),''],['home','short'],['home','é'.repeat(32)],['bad\0ssid','']]){
+    wifi.elements.wifiSsid.value=ssid;wifi.elements.wifiPassword.value=password;
+    await wifi.elements.wifiForm.onsubmit(submit);assert.equal(wifiWrites,0);assert.equal(wifi.elements.wifiFeedback.dataset.state,'error');
+    assert.equal(wifi.elements.wifiPassword.value,'');assert.equal(wifi.elements.wifiSave.disabled,false);
+  }
+  wifi.elements.wifiSsid.value='home';wifi.elements.wifiPassword.value='fake-password';
+  wifi.sandbox.fetch=async()=>({ok:false,status:503,json:async()=>({})});
+  await wifi.elements.wifiForm.onsubmit(submit);assert.equal(wifi.elements.wifiPassword.value,'');assert.equal(vm.runInContext('restarting',wifi.sandbox),false);
+  wifi.sandbox.fetch=async()=>({ok:false,status:403,json:async()=>({})});
+  await wifi.elements.wifiScan.onclick();assert.equal(wifi.sandbox.location.redirect,'/unlock');assert.equal(wifi.elements.wifiScan.disabled,false);
+  wifi.sandbox.fetch=async(url,options)=>{if(options?.method==='PUT'){wifiWrites++;wifiPayload=JSON.parse(options.body);assert.equal(wifi.elements.wifiPassword.value,'');assert.equal(options.headers['X-CSRF-Token'],'csrf')}return ok({token:'csrf',saved:true})};
+  wifi.elements.wifiSsid.value='é'.repeat(16);wifi.elements.wifiPassword.value='';
+  await wifi.elements.wifiForm.onsubmit(submit);assert.deepEqual(wifiPayload,{ssid:'é'.repeat(16),password:''});assert.equal(wifiWrites,1);
+  assert.equal(wifi.elements.settingsContent.hidden,true);assert.equal(wifi.elements.restartPage.hidden,false);
+  assert.match(wifi.elements.restartMessage.textContent,/Wi-Fi credentials/);assert.match(wifi.elements.restartDetails.textContent,/IP shown on the device display/);
+  assert.equal(wifi.elements.restartReadings.hidden,true);
+  let wifiAfterRestart=0;wifi.sandbox.fetch=async()=>{wifiAfterRestart++;return ok({})};
+  await vm.runInContext('refreshDevice()',wifi.sandbox);await vm.runInContext('refreshMqtt()',wifi.sandbox);assert.equal(wifiAfterRestart,0);
   let diagnosticsCalls=[];
   const diagnostics=context(async url=>{diagnosticsCalls.push(url);return url==='/api/v1/values'?ok({access:'View',simulation:true,uptime_ms:123,errors:2,last_error:'bad fcs',last_error_ms:100,notifications:4,validated_hdlc:5,values:[{obis:'1.0.250.7.0.255',name:'<script>unknown</script>',value:'<img>',age_ms:20,timestamp_ms:100,type:9,stale:true}]}):ok({limit:4,history_overwritten:3,records:[{sequence:9,timestamp_ms:100,source:'replay',layer:'wire_hdlc',hex:'7E00FF'}]})});
   vm.runInContext(scripts[4],diagnostics.sandbox);await settle();
