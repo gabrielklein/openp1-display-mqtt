@@ -6,9 +6,8 @@ Home Assistant Discovery, read-only diagnostics and browser firmware updates.
 
 ![OpenP1 Display running beside a meter](../hardware/LiveDevice.jpg)
 
-This guide covers the current firmware. Software through M6 is implemented and
-accepted by user report; electrical verification and prolonged M7 tests remain
-open. A matching connector alone does not establish meter compatibility.
+This guide covers the current firmware. Milestones M0–M7 are accepted by user
+report; M7 was closed on 2026-10-29. See [acceptance and evidence limits](M7_ACCEPTANCE.md). A matching connector alone does not establish meter compatibility.
 
 ## 1. Prepare the hardware
 

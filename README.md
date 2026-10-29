@@ -25,7 +25,8 @@ Built with PlatformIO, pinned `espressif32@6.9.0`, ESP-IDF 5.3.1 and
 C++17-compatible application code. MIT licence.
 
 The current software through M6 is implemented and accepted by user report.
-M7 hardware/electrical, prolonged real-meter and release checks remain open.
+M7 was closed by explicit user acceptance on 2026-10-29; see the
+[acceptance record](docs/M7_ACCEPTANCE.md) for evidence and limitations.
 The proposed board is a Tenstar TS0636G T-Display with 16 MiB flash; exact
 board/meter electrical compatibility still requires verification.
 

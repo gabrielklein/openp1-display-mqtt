@@ -76,7 +76,8 @@ arbitrary functional faults are not detected automatically. Keep a USB recovery 
 
 The user accepted the migration/update/version/settings/MQTT, invalid-image and
 rollback checklist. Exact flashed hash and detailed fault-injection procedures
-were not supplied. See TEST_PLAN.md for remaining hardware/release validation.
+were not supplied. M7 was subsequently accepted on 2026-10-29; see M7_ACCEPTANCE.md for evidence
+and limitations, and TEST_PLAN.md for repeatable validation.
 
 ## Official browser USB flasher
 

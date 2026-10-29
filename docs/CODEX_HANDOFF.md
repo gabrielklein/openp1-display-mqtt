@@ -1,9 +1,10 @@
 # Development handoff
 
 Read AGENTS.md, REQUIREMENTS.md, ../hardware/HARDWARE.md, ARCHITECTURE.md and ROADMAP.md.
-The current code includes accepted M0–M6 functionality. Continue with the M7
-hardware/release checks in TEST_PLAN.md; do not describe the final release or
-unmeasured electrical compatibility as validated.
+The current code includes accepted M0–M7 milestones. M7 was closed by explicit
+user acceptance on 2026-10-29; see M7_ACCEPTANCE.md. TEST_PLAN.md remains the
+retest reference. Do not describe unmeasured electrical compatibility as
+independently validated.
 
 Git was reset to an anonymized initial snapshot. Old milestone commits/tags and
 the history bundle are gone. Use `git --git-dir=.git-local --work-tree=.` in this

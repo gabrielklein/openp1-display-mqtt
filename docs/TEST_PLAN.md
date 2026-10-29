@@ -1,5 +1,9 @@
 # M7 hardware and release test plan
 
+M7 was closed by explicit user acceptance on 2026-10-29; see
+[M7 acceptance](M7_ACCEPTANCE.md) for results and evidence limits. This checklist
+remains the reference for retesting; closure does not assert unavailable measurements.
+
 Record each result with date, firmware date version, application SHA256, test,
 duration, pass/fail and observations. Completed M6 acceptance is documented in
 FIRMWARE_UPDATE.md; do not treat it as proof of electrical compatibility or soak.

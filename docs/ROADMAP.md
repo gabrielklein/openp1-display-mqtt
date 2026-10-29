@@ -1,7 +1,7 @@
 # Current status and remaining work
 
-The current snapshot includes completed software through M6, accepted by user
-report. These labels describe functional scope; they are not existing Git tags.
+The current snapshot includes completed milestones M0–M7, accepted by user
+report. M7 was explicitly accepted on 2026-10-29. These labels describe functional scope; they are not existing Git tags.
 Git was reset to one anonymized initial snapshot and new commits build on it.
 There is no remote or public release.
 
@@ -12,14 +12,20 @@ There is no remote or public release.
 | M4: policies/S2, MQTT, TLS and Home Assistant Discovery | Accepted |
 | M5: persistent UART settings and read-only diagnostics | Accepted, reduced scope |
 | M6: Full-only web update, date versions and packaging script | Accepted |
-| M7: hardware/electrical, prolonged real-meter test and release | Open |
+| M7: hardware/electrical, prolonged real-meter test and release | Closed by user acceptance, 2026-10-29 |
 
 M6 acceptance covers the proposed migration/update/version/settings/MQTT,
 invalid-image and rollback checklist. No exact flashed hash, detailed fault-test
 procedure or timing evidence was supplied. User acceptance is not an independent
 electrical measurement or exhaustive fault-injection result.
 
-## M7 completion criteria
+## M7 acceptance
+
+The user confirmed that everything works and explicitly authorized M7 closure on
+2026-10-29. See [acceptance record](M7_ACCEPTANCE.md) for evidence and limitations.
+The following checklist remains the reference for reproducible validation.
+
+## M7 validation reference
 
 Follow [TEST_PLAN.md](TEST_PLAN.md): verify hardware and supply compatibility,
 real-meter reading consistency, 48-hour stability and repeated Wi-Fi/broker

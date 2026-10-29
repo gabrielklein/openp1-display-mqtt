@@ -65,6 +65,6 @@ These requirements describe the current software. Historical notes under
   preserve NVS. Enable startup confirmation and bootloader rollback.
 - Version scheme YYYY.MM.DD; build script packages application/checksum/metadata
   without flashing. Old factory-only installations require one USB migration.
-- M0–M6 functionality is implemented and accepted; M7 physical/electrical, soak,
-  enclosure, clean installation and release audit remain. See TEST_PLAN.md.
+- M0–M7 are accepted by user report; M7 was closed on 2026-10-29.
+  See M7_ACCEPTANCE.md for evidence/limitations and TEST_PLAN.md for retesting.
 - Never power from meter and USB together. Never flash without user instruction.

@@ -69,10 +69,11 @@ https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/periph
 
 ## Current validation and panel profile
 
-The user accepted display/replay, S2/access, MQTT and web-update functionality.
+The user accepted display/replay, S2/access, MQTT and web-update functionality,
+and explicitly closed M7 on 2026-10-29 (see [acceptance record](../docs/M7_ACCEPTANCE.md)).
 No electrical measurements, exact flashed image hash or long-run duration were
 supplied. Flash capacity, RX idle voltage/interface, meter power budget under
-radio load and GPIO35 pull-up remain M7 checks. See [test plan](../docs/TEST_PLAN.md).
+radio load and GPIO35 pull-up remain checks to reproduce for each hardware installation. See [test plan](../docs/TEST_PLAN.md).
 
 The software uses the ESP-IDF ST7789 driver: SPI2, 20 MHz, 240×135 landscape,
 XY swap and X mirror, gap 40/53, inversion enabled. Color rendering uses an
